@@ -18,6 +18,8 @@ require('dotenv').config({path:"./config.env"})
 
 const PORT = process.env.PORT || 3000;
 
+app.use(express.json());
+
 nextApp.prepare().then(() => {
     app.all("*", (req, res) => handle(req, res));
 
