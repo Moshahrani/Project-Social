@@ -9,10 +9,19 @@ function NaviBar() {
     return (
         <Menu fluid borderless>
             <Container text>
+
+                
                 <Link href="/login">
                     <Menu.Item header active={true}>
                         <Icon size="big" name="sign in" />
                       Login
+                    </Menu.Item>
+                </Link>
+
+                <Link href="/signup">
+                    <Menu.Item header active={true}>
+                        <Icon size="big" name="signup" />
+                      Sign Up
                     </Menu.Item>
                 </Link>
 
