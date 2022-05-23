@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const HeadInfo = () => {
+const HeadInfo = () => (
     <div>
         <Head>
             <meta name="viewport" content="initial-scale=1.0, width=device-width" />
@@ -12,4 +12,6 @@ const HeadInfo = () => {
             </title>
         </Head>
     </div>
-}
+);
+
+export default HeadInfo;
