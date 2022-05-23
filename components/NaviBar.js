@@ -6,7 +6,19 @@ import Link from "next/link";
 function NaviBar() {
     const router = useRouter()
 
-    
+    return (
+        <Menu fluid borderless>
+            <Container text>
+                <Link href="/login">
+                    <Menu.Item header active={true}>
+                        <Icon size="big" name="sign in" />
+                      Login
+                    </Menu.Item>
+                </Link>
+
+            </Container>
+        </Menu>
+    )
 }
 
 export default NaviBar;
