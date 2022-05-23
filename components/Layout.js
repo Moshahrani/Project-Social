@@ -8,7 +8,9 @@ function Layout({ children }) {
         <div>
             <HeadInfo />
             <NaviBar />
-            <Container style={{ paddingTop: "1rem" }} text></Container>
+            <Container style={{ paddingTop: "1rem" }} text>
+                {children}
+            </Container>
         </div>
     )
 }
