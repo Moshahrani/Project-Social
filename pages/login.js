@@ -1,11 +1,15 @@
 import React from "react";
+import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
+
 
 function Login() {
     return (
-        <div>
-            Login
-        </div>
-    )
-}
+        <>
+        <HeaderMessage />
+        
+        <FooterMessage />
+        </>
+    );
+};
 
 export default Login;

@@ -7,19 +7,19 @@ import Router from "next/router";
 
 function Layout({ children }) {
 
-Router.onRouteChangeStart=()=>nprogress.start();
-Router.onRouteChangeComplete=()=>nprogress.done();
-Router.onRouteChangeError=()=>nprogress.done();
+// Router.onRouteChangeStart=()=>nprogress.start();
+// Router.onRouteChangeComplete=()=>nprogress.done();
+// Router.onRouteChangeError=()=>nprogress.done();
  
 
     return (
-        <div>
+        <>
             <HeadInfo />
             <NaviBar />
             <Container style={{ paddingTop: "1rem" }} text>
                 {children}
             </Container>
-        </div>
+        </>
     )
 }
 
