@@ -2,6 +2,7 @@ import { Icon, Message, Divider } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
+// Header Message with pathname route setup
 
 export const HeaderMessage = () => {
     const router = useRouter();
@@ -15,6 +16,9 @@ export const HeaderMessage = () => {
         />
     )
 }
+
+// Footer Message with pathname route setup with conditional 
+// to either route user to login or signup section
 
 export const FooterMessage = () => {
     const router = useRouter();
