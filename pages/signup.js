@@ -29,14 +29,30 @@ function Signup() {
 
     const handleSubmit = e => e.preventDefault();
 
-    const [showSocialLinks, setShowSocialLinks] = useState(false);
+    const [formLoading, setFormLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
-    const [formLoading, setFormLoading] = useState(false);
+    const [showSocialLinks, setShowSocialLinks] = useState(false);
+    const [submitDisabled, setSubmitDisabled] = useState(true);
 
     const [username, setUsername] = useState('');
     const [usernameLoading, setUsernameLoading] = useState(false);
     const [usernameAvailable, setUsernameAvailable] = useState(false);
+
+    // if every input value is true (in an array), the signup button will be open to submit,
+    // else, must fix input fields before proceeding for signup
+
+    useEffect(() => {
+        const isUser = Object.values({
+            name,
+            email,
+            password,
+            bio
+        }).every(item => Boolean(item));
+
+        isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
+
+    }, [user]);
 
     return (
         <>
@@ -109,6 +125,12 @@ function Signup() {
                         setShowSocialLinks={setShowSocialLinks}
                         handleChange={handleChange}
                     />
+
+                    <Divider hidden />
+                    <Button content="Signup"
+                        type="submit"
+                        color="green"
+                        disabled={submitDisabled || !usernameAvailable} />
                 </Segment>
             </Form>
             <FooterMessage />
