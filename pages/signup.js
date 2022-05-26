@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Message, Segment, TextArea, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
-
+import SocialProfiles from "../components/Basic/SocialProfiles";
 
 // regex used to authenticate username info
 export const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
@@ -33,7 +33,7 @@ function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     const [formLoading, setFormLoading] = useState(false);
-    
+
     const [username, setUsername] = useState('');
     const [usernameLoading, setUsernameLoading] = useState(false);
     const [usernameAvailable, setUsernameAvailable] = useState(false);
@@ -84,7 +84,7 @@ function Signup() {
                         iconPosition="left"
                         type={showPassword ? "text" : "password"}
                     />
-                     <Form.Input
+                    <Form.Input
                         loading={usernameLoading}
                         error={!usernameAvailable}
                         required
@@ -93,16 +93,21 @@ function Signup() {
                         placeholder="Username"
                         name="email"
                         value={username}
-                        onChange={e =>  {
+                        onChange={e => {
                             setUsername(e.target.value)
-                          if(regexUserName.test(e.target.value)) {
-                              setUsernameAvailable(true);
-                          } else {
-                              setUsernameAvailable(false);
-                          } 
+                            if (regexUserName.test(e.target.value)) {
+                                setUsernameAvailable(true);
+                            } else {
+                                setUsernameAvailable(false);
+                            }
                         }}
                         icon={usernameAvailable ? "check" : "close"}
                         iconPosition="left"
+                    />
+                    <SocialProfiles user={user}
+                        showSocialLinks={showSocialLinks}
+                        setShowSocialLinks={setShowSocialLinks}
+                        handleChange={handleChange}
                     />
                 </Segment>
             </Form>
