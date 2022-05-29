@@ -40,7 +40,7 @@ function ImageBoxDropoff({ highlight,
                         }}>
                         {mediaPreview === null ? (
                             <>
-                                <Segment color={highlight ? "green" : ""} placeholder basic>
+                                <Segment color={highlight ? "green" : "red"} placeholder basic>
                                     <Header icon>
                                         <Icon
                                             name="file image outline"
