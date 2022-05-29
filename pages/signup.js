@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Message, Segment, TextArea, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
 import SocialProfiles from "../components/Basic/SocialProfiles";
+import ImageBoxDropoff from "../components/Basic/ImageBoxDropoff";
 
 // regex used to authenticate username info
 export const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
@@ -22,7 +23,13 @@ function Signup() {
     const { name, email, password, bio } = user;
 
     const handleChange = (e) => {
-        const { name, value } = e.target
+        const { name, value, files } = e.target
+
+        // setting up media preview
+        if (name === "media") {
+            setMedia(files[0])
+            setMediaPreview(URL.createObjectURL(files[0]))
+        }
 
         setUser(prev => ({ ...prev, [name]: value }))
     };
@@ -38,6 +45,11 @@ function Signup() {
     const [username, setUsername] = useState('');
     const [usernameLoading, setUsernameLoading] = useState(false);
     const [usernameAvailable, setUsernameAvailable] = useState(false);
+
+    const [media, setMedia] = useState(null);
+    const [mediaPreview, setMediaPreview] = useState(null);
+    const [highlight, setHighlight] = useState(false);
+    const inputRef = useRef();
 
     // if every input value is true (in an array), the signup button will be open to submit,
     // else, must fix input fields before proceeding for signup
@@ -60,6 +72,15 @@ function Signup() {
             <Form loading={formLoading} error={errorMessage !== null} onSubmit={handleSubmit}>
                 <Message error header="Oops" content={errorMessage} onDismiss={() => setErrorMessage(null)} />
                 <Segment>
+                    <ImageBoxDropoff
+                        mediaPreview={mediaPreview}
+                        setMediaPreview={setMediaPreview}
+                        setMedia={setMedia}
+                        inputRef={inputRef}
+                        highlight={highlight}
+                        setHighlight={setHighlight}
+                        handleChange={handleChange}
+                    />
                     <Form.Input
                         required
                         fluid
@@ -127,7 +148,9 @@ function Signup() {
                     />
 
                     <Divider hidden />
-                    <Button content="Signup"
+                    <Button
+                        icon="signup"
+                        content="Signup"
                         type="submit"
                         color="green"
                         disabled={submitDisabled || !usernameAvailable} />
