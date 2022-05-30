@@ -15,3 +15,5 @@ const uploadImage = async (media) => {
         return
     }
 }
+
+export default uploadImage;
