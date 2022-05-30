@@ -28,7 +28,7 @@ function SocialProfiles({
                 <>
                     <Divider />
                     <Form.Input
-                        icon="facebook f"
+                        icon="facebook"
                         iconPosition="left"
                         name="facebook"
                         value={facebook}
