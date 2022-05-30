@@ -5,7 +5,7 @@ import SocialProfiles from "../components/Basic/SocialProfiles";
 import ImageBoxDropoff from "../components/Basic/ImageBoxDropoff";
 
 // regex used to authenticate username info
-export const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
 function Signup() {
 
