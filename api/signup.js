@@ -5,7 +5,8 @@ const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
 const jsonwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const isEmail = require("validator/lib/")
+const isEmail = require("validator/lib/");
+const user = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
