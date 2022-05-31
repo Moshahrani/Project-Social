@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Message, Segment, TextArea, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
+import { loginUser } from "../utilities/authUser";
 
 
 function Login() {
@@ -31,8 +32,12 @@ function Login() {
 
     }, [user]);
 
-    const handleSubmit = e => e.preventDefault();
+    const handleSubmit = async e => { 
+        e.preventDefault();
 
+        await loginUser(user, setErrorMessage, setFormLoading);
+    };
+    
     return (
         <>
             <HeaderMessage />
