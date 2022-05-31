@@ -10,6 +10,8 @@ const userPic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-pi
 
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
+// checking if username is already in use
+
 router.get("/:username", async (req, res) => {
     const { username } = req.params;
     console.log(username);
@@ -33,6 +35,8 @@ router.get("/:username", async (req, res) => {
         return res.status(500).send("Server error");
     }
 })
+
+// enrolling new user's information to the backend
 
 router.post("/", async (req, res) => {
     const {
@@ -78,6 +82,7 @@ router.post("/", async (req, res) => {
         user.password = await bcrypt.hash(password, 10);
         await user.save();
 
+        // adding any social media links to profile model
 
         let profileFields = {};
         profileFields.user = user._id;

@@ -1,7 +1,7 @@
-import axios from "axios"
-import baseUrl from "./baseUrl"
-import catchErrors from "./catchErrors"
-import cookie from "js-cookie"
+import axios from "axios";
+import baseUrl from "./baseUrl";
+import catchErrors from "./catchErrors";
+import cookie from "js-cookie";
 
 export const registerUser = async (user, profilePicUrl, setError, setLoading) => {
 
@@ -16,7 +16,7 @@ export const registerUser = async (user, profilePicUrl, setError, setLoading) =>
 };
 
 export const loginUser = async (user, setError, setLoading) => {
-    setLoading(true)
+    setLoading(true);
     try {
         const result = await axios.post(`${baseUrl}/api/authorization`, { user });
         setToken(result.data);
