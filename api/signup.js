@@ -5,14 +5,14 @@ const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
 const jsonwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const isEmail = require("validator/lib/");
-const user = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+const isEmail = require("validator/lib/isEmail");
+const userPic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
 
 router.get("/:username", async (req, res) => {
     const { username } = req.params;
-
+    console.log(username);
     try {
         if (username.length < 1) {
             return res.status(401).send("Invalid")
@@ -21,12 +21,13 @@ router.get("/:username", async (req, res) => {
             return res.status(401).send("Invalid");
         }
 
-        const user = await UserModel.findOne({ username: username.toLocaleLowerCase() })
+        const user = await UserModel.findOne({ username: username.toLowerCase() });
 
         if (user) {
             return res.status(401).send("Username is already in use");
         }
-
+        return res.status(200).send("Available");
+        
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
@@ -37,6 +38,7 @@ router.post("/", async (req, res) => {
     const {
         name,
         email,
+        username,
         password,
         bio,
         facebook,
@@ -46,35 +48,41 @@ router.post("/", async (req, res) => {
     } = req.body.user;
 
     if (!isEmail(email)) {
-        return res.status(401).send("Invalid");
+        return res.status(401).send("Invalid email");
     }
     if (password.length < 6) {
         return res.status(401).send("Password must be at least 6 characters")
     }
 
     try {
-        let user = await UserModel.findOne({ email: email.toLowerCase() })
-
+        let user;
+        user = await UserModel.findOne({ email: email.toLowerCase() });
         if (user) {
-            return res.status(401).send("User already registered")
+          return res.status(401).send("User is already registered");
         }
+   
+        user = await UserModel.findOne({ username: username.toLowerCase() });
+        if (user) {
+          return res.status(401).send("Username is already in use");
+        }
+   
 
         user = new UserModel({
             name,
             email: email.toLowerCase(),
             username: username.toLowerCase(),
             password,
-            profilePicUrl: req.body.profilePicUrl || user
+            profilePicUrl: req.body.profilePicUrl || userPic
         });
 
         user.password = await bcrypt.hash(password, 10);
         await user.save();
 
 
-        let profileFields = {}
-        profileFields.user = user._id
-        profileFields.bio = bio
-        profileFields.social = {}
+        let profileFields = {};
+        profileFields.user = user._id;
+        profileFields.bio = bio;
+        profileFields.social = {};
         if (facebook) profileFields.social.facebook = facebook;
         if (twitter) profileFields.social.twitter = twitter;
         if (instagram) profileFields.social.instagram = instagram;

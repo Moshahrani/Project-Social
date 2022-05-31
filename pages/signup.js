@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { Form, Button, Message, Segment, TextArea, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
 import SocialProfiles from "../components/Basic/SocialProfiles";
 import ImageBoxDropoff from "../components/Basic/ImageBoxDropoff";
+import baseUrl from "../utilities/baseUrl";
+import { registerUser } from "../utilities/authUser";
+import uploadPic from "../utilities/cloudinary";
+let cancel;
 
 // regex used to authenticate username info
 const regexUserName = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
@@ -34,7 +39,21 @@ function Signup() {
         setUser(prev => ({ ...prev, [name]: value }))
     };
 
-    const handleSubmit = e => e.preventDefault();
+    const handleSubmit = async e => {
+     e.preventDefault();
+     setFormLoading(true)
+
+     let profilePicUrl;
+       if (media !== null) {
+           profilePicUrl = await uploadPic(media)
+       }
+
+       if (media !== null && !profilePicUrl) {
+           setFormLoading(false)
+           return setErrorMessage("Error uploading image")
+       }
+       await registerUser(user, profilePicUrl, setErrorMessage, setFormLoading);
+    };
 
     const [formLoading, setFormLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -65,6 +84,41 @@ function Signup() {
         isUser ? setSubmitDisabled(false) : setSubmitDisabled(true);
 
     }, [user]);
+
+    const checkUsername = async () => {
+
+        setUsernameLoading(true);
+
+        // creating a cancel token to cancel a request which is pending
+        // and make a new request
+
+        try {
+            cancel && cancel();
+
+            const CancelToken = axios.CancelToken;
+
+            const result = await axios.get(`${baseUrl}/api/signup/${username}`, {
+                cancelToken: new CancelToken(canceler => {
+                    cancel = canceler;
+                })
+            });
+
+            if (result.data === "Available") {
+                if (errorMessage !== null) setErrorMessage(null);
+                setUsernameAvailable(true);
+                setUser(prev => ({ ...prev, username }));
+            }
+        } catch (error) {
+            console.log(error)
+            setErrorMessage("Username Not Available");
+            setUsernameAvailable(false);
+        }
+        setUsernameLoading(false);
+    };
+
+    useEffect(() => {
+        username === "" ? setUsernameAvailable(false) : checkUsername();
+    }, [username]);
 
     return (
         <>

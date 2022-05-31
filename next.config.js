@@ -1,5 +1,5 @@
 module.exports = {
     env: {
-        CLOUDINARY_URL: "https://api.cloudinary.com/v1_1/moshhh"
+        NEXT_PUBLIC_ANALYTICS_ID_CLOUDINARY_URL: "https://api.cloudinary.com/v1_1/moshhh"
     }
 };

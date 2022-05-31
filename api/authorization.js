@@ -1,4 +1,3 @@
-
 const express = require("express")
 const router = express.Router();
 const UserModel = require("../models/UserModel")
@@ -6,7 +5,7 @@ const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
 const jsonwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const isEmail = require("validator/lib/")
+const isEmail = require("validator/lib/isEmail")
 
 router.post("/", async (req, res) => {
     const {
