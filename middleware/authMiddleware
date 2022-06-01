@@ -1,4 +1,4 @@
-const jsonwt = require("jsonwebtoken")
+const jsonwt = require("jsonwebtoken");
 
 
 module.exports = (req, res, next) => {
@@ -9,13 +9,10 @@ module.exports = (req, res, next) => {
          // destructuring userId from payload object after token was sent 
          // from our backend (auth.js)
 
-        const { userId } = 
-            jsonwt.verify(req.headers.authorization,
-            process.env.jwtSecret);
+        const { userId } = jsonwt.verify(req.headers.authorization, process.env.jsonwtSecret);
 
         req.userId = userId;
         next();
-        
     } catch (error) {
         console.error(error);
         return res.status(401).send("Unauthorized");

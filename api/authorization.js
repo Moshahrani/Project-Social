@@ -1,7 +1,6 @@
 const express = require("express")
 const router = express.Router();
 const UserModel = require("../models/UserModel")
-const ProfileModel = require("../models/ProfileModel");
 const FollowerModel = require("../models/FollowerModel");
 const jsonwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -12,12 +11,12 @@ router.get("/", authMiddleware, async (req, res) => {
     const { userId } = req;
 
     try {
-        
         const user = await UserModel.findById(userId);
-
+ 
         const userFollowInfo = await FollowerModel.findOne({ user: userId });
 
         return res.status(200).json({ user, userFollowInfo });
+
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
@@ -25,6 +24,7 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+    console.log(req.body.user)
     const {
         email,
         password,
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
         // sending token back to frontend 
 
         const payload = { userId: user._id };
-        jsonwt.sign(payload, process.env.jsonwtSecret, { expiresIn: "3d" }, (err, token) => {
+        jsonwt.sign(payload, process.env.jsonwtSecret, { expiresIn: "2d" }, (err, token) => {
             if (err) throw err;
             res.status(200).json(token);
         });
