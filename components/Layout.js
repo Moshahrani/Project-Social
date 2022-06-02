@@ -22,13 +22,25 @@ function Layout({ children, user }) {
                 <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
                   <Ref innerRef={contextRef}>
                     <Grid>
-
+                         
                         <Grid.Column floated="left" width={2}>
                             <Sticky context={contextRef}>
                                 <SideMenu user={user} />
                             </Sticky>
                         </Grid.Column>
-                        
+
+                        <Grid.Column width={10}>
+                            <Visibility context={contextRef}>{children}
+                            </Visibility>
+                        </Grid.Column>
+
+                        <Grid.Column floated="left" width={4}>
+                            <Sticky context={contextRef}>
+                                <Segment basic>
+                                    <Search />
+                                </Segment>
+                            </Sticky>
+                        </Grid.Column>
                     </Grid>
                   </Ref>
                 </div>
