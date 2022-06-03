@@ -61,7 +61,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                 </List.Item>
             </Link>
 
-            <List.Item onClick={() => logout(email)}>
+            <List.Item onClick={() => logoutUser(email)}>
                 <Icon name="log out" size="large" />
                 <List.Content>
                     <List.Header content="Logout" />
