@@ -24,6 +24,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                     </List.Content>
                 </List.Item>
             </Link>
+            <br />
 
             <Link href="/messages">
                 <List.Item active={isActive("/messages")}>
@@ -37,7 +38,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                     </List.Content>
                 </List.Item>
             </Link>
-
+            <br />
 
             <Link href="/notifications">
                 <List.Item active={isActive("/notifications")}>
@@ -51,6 +52,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                     </List.Content>
                 </List.Item>
             </Link>
+            <br />
 
             <Link href={`/${username}`}>
                 <List.Item active={router.query.username === username}>
@@ -60,6 +62,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                     </List.Content>
                 </List.Item>
             </Link>
+            <br />
 
             <List.Item onClick={() => logoutUser(email)}>
                 <Icon name="log out" size="large" />
@@ -67,8 +70,6 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                     <List.Header content="Logout" />
                 </List.Content>
             </List.Item>
-
-
         </List>
     </>
 }
