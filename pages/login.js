@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Message, Segment, TextArea, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
 import { loginUser } from "../utilities/authUser";
-
+import cookie from "js-cookie";
 
 function Login() {
     const [user, setUser] = useState({
@@ -37,6 +37,17 @@ function Login() {
 
         await loginUser(user, setErrorMessage, setFormLoading);
     };
+
+    useEffect(() => {
+        document.title = "Welcome Back";
+        // check for 
+        const userEmail = cookie.get("userEmail");
+        // check for userEmail and then automatically fill in user info/values
+        if (userEmail) {
+          setUser(prev => ({ ...prev, email: userEmail }))
+        };
+      }, []);
+   
     
     return (
         <>

@@ -29,18 +29,18 @@ export const loginUser = async (user, setError, setLoading) => {
 };
 
 export const redirectUser = (ctx, location) => {
-        //console.log(ctx.req)
+    //console.log(ctx.req)
     // if user is on server-side, set location to location we are passing
     if (ctx.req) {
         ctx.res.writeHead(302, { Location: location })
         ctx.res.end();
-    } 
+    }
     // if user is on client-side
     else {
         Router.push(location)
         //window.location.href = location;
     }
-     return {};
+    return {};
 };
 
 // function to set cookie and push user to homepage
@@ -50,3 +50,12 @@ const setToken = token => {
     Router.push("/");
     //window.location.href = "/";
 };
+
+export const logoutUser = email => {
+    cookie.set("userEmail", email);
+    cookie.remove("token");
+    Router.push("/login");
+
+    // reload the current URL
+    Router.reload();
+}
