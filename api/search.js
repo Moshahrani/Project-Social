@@ -6,20 +6,18 @@ const UserModel = require("../models/UserModel");
 router.get("/:searchText", authMiddleware, async (req, res) => {
     const { searchText } = req.params;
 
-    if (searchText.length === 0) return;
-
-    // regex expression for our search text
-    // searching for user now
     try {
-        let userPattern = new RegExp(`^${searchText}`)
+      //console.log(searchText)
 
+      //if (searchText.length === 0) return;
+
+    // searching for user now     
         const results = await UserModel.find({
-
-            // not case sensitive
-            name: { $regex: userPattern, $options: "i" }
+            // not case sensitive "i" option
+            name: { $regex: searchText, $options: "i" }
         });
 
-        res.json(results);
+        return res.json(results);
 
     } catch (error) {
         console.error(error);
@@ -28,3 +26,4 @@ router.get("/:searchText", authMiddleware, async (req, res) => {
 })
 
 module.exports = router;
+  
