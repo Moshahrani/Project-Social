@@ -37,7 +37,7 @@ function SearchComp() {
           cancel = canceler;
         })
       });
-ß
+
       if (res.data.length === 0) {
         results.length > 0 && setResults([]);
         return setLoading(false);
