@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { List, Image, Search } from "semantic-ui-react";
 import cookie from "js-cookie";
@@ -35,10 +35,10 @@ function SearchComp() {
       });
 
       if (res.data.length === 0) {
+        results.length > 0 && setResults([]);
         return setLoading(false);
       }
-
-      setResults(result.data);
+      setResults(res.data);
 
     } catch (error) {
       console.log("Error Searching");
@@ -47,11 +47,15 @@ function SearchComp() {
 
   };
 
-
+  useEffect(() => {
+    if (text.length === 0 && loading) setLoading(false);
+  }, [text]);
 
   return (
     <Search onBlur={() => {
       results.length > 0 && setResults([]);
+      loading && setLoading(false);
+      setText("");
     }}
       loading={loading}
       value={text}
