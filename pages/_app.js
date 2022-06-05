@@ -30,27 +30,27 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
            if (Component.getInitialProps) {
                pageProps = await Component.getInitialProps(ctx);
            }
-       }
 
         // making request to backend for user information only 
         // when token is in storage
        try {
 
-           const result = await axios.get(`${baseUrl}/api/authorization`,
-               { headers: { Authorization: token }});
+        const result = await axios.get(`${baseUrl}/api/authorization`,
+            { headers: { Authorization: token }});
 
-           const { user, userFollowInfo } = result.data
+        const { user, userFollowInfo } = result.data
 
-          // redirect user to Home Page if logged in
-           if (user) !protectedRoutes && redirectUser(ctx, "/");
+       // redirect user to Home Page if logged in
+        if (user) !protectedRoutes && redirectUser(ctx, "/");
 
-           pageProps.user = user;
-           pageProps.userFollowInfo = userFollowInfo;
+        pageProps.user = user;
+        pageProps.userFollowInfo = userFollowInfo;
 
-       } catch (error) {
-           destroyCookie(ctx, "token")
-           //redirectUser(ctx, "/login")
-       }
+    } catch (error) {
+        destroyCookie(ctx, "token")
+        redirectUser(ctx, "/login")
+    }
+  }     
     
        return { pageProps };
 }
