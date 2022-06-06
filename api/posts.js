@@ -11,7 +11,7 @@ router.post("/", authMiddleware, async (req, res) => {
     const { text, location, picUrl } = req.body;
 
     if (text.length < 1) {
-        return res.status(401).send("Must containt at least 1 character");
+        return res.status(401).send("Must contain at least 1 character");
     }
 
     try {
