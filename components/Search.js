@@ -20,6 +20,8 @@ function SearchComp() {
     const { value } = e.target;
     setText(value);
     if (value.length === 0) return ;
+
+    // removes white spaces during search
     if (value.trim().length === 0) return;
   
      setText(value);
@@ -38,6 +40,9 @@ function SearchComp() {
         })
       });
 
+      // fixed bug where no results from the backend but 
+      // the previous state was still populated and showing 
+      // some results 
       if (res.data.length === 0) {
         results.length > 0 && setResults([]);
         return setLoading(false);
@@ -50,6 +55,10 @@ function SearchComp() {
 
     setLoading(false);
   };
+
+
+  // fixed bug when text length was equal to 0 and loading was 
+  // not being changed to false automatically
 
   useEffect(() => {
 
