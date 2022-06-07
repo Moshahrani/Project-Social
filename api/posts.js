@@ -16,7 +16,7 @@ router.post("/", authMiddleware, async (req, res) => {
 
     try {
 
-        const newPost={
+        const newPost = {
             user: req.userId,
             text
         }
@@ -25,12 +25,49 @@ router.post("/", authMiddleware, async (req, res) => {
         if (picUrl) newPost.picUrl = picUrl;
 
         const post = await new PostModel(newPost).save();
-
         return res.json(post);
+
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
     }
 });
+
+// get all posts 
+router.get("/", authMiddleware, async (req, res) => {
+
+    try {
+        // sorting posts in descending order of date creation
+        const posts = await PostModel.find()
+            .sort({ createdAt: -1 })
+            .populate("user")
+            .populate("comments.user");
+
+        return res.json(posts);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server error");
+    }
+});
+
+// get post by ID
+
+router.get("/:postId", authMiddleware, async (req, res) => {
+
+    try {
+
+        const post = await PostModel.findById(req.params.postId)
+
+        if (!post) {
+            return res.status(404).send("Post not found");
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server error");
+    }
+
+})
 
 module.exports = router;
