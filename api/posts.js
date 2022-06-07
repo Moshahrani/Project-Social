@@ -127,16 +127,16 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
             return res.status(404).send("No Post Found");
         }
 
-        const liked = post.likes.filter(like => 
+        const liked = post.likes.filter(like =>
             like.user.toString() === userId).length > 0;
-        
+
         if (liked) {
             return res.status(401).send("Post already liked");
         }
 
         await post.likes.unshift({ user: userId });
         await post.save();
-    
+
         return res.status(200).send("Liked the Post")
     } catch (error) {
         console.error(error);
@@ -154,31 +154,53 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
         const { userId } = req;
 
         const post = await PostModel.findById(postId);
-    
+
         if (!post) {
             return res.status(404).send("No Post Found");
         }
-         // filtering over likes array and checking 
-         // if post has not been liked before
-        const liked = post.likes.filter(like => 
+        // filtering over likes array and checking 
+        // if post has not been liked before
+        const liked = post.likes.filter(like =>
             like.user.toString() === userId).length === 0;
-        
+
         if (liked) {
             return res.status(401).send("Post never liked previously");
         }
-        
+
         // mapping over likes to find index of post
         const index = post.likes.map(like => like.user.toString()).indexOf(userId);
-        
+
         // removing object from likes array
         await post.likes.splice(index, 1);
-    
+
         await post.save();
-    
+
         return res.status(200).send("Post Unliked")
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
+    }
+})
+
+// get all likes of a post
+
+router.get("/like/:postId", authMiddleware, async (req, res) => {
+
+    try {
+
+        const { postId } = req.params;
+
+        const post = await PostModel.findById(postId).populate("likes.user");
+
+        if (!post) {
+            return res.status(404).send("No post found");
+        }
+
+        return res.status(200).json(post.likes);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("")
     }
 })
 
