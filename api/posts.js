@@ -4,6 +4,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
+const uuid = require("uuid").v4;
 
 // creating a post
 
@@ -203,6 +204,99 @@ router.get("/like/:postId", authMiddleware, async (req, res) => {
         return res.status(500).send("")
     }
 })
+
+// create a comment 
+
+router.post("/comment/:postId", authMiddleware, async (req, res) => {
+
+    try {
+
+        const { postId } = req.params;
+
+        const { text } = req.body;
+
+        if (text.length < 1) {
+            return res.status(401).send("Comment should be at least one character");
+        }
+
+        const post = await PostModel.findById(postId);
+
+        if (!post) {
+            return res.status(404).send("Post not found")
+        }
+        // using the uuid dependency to create a
+        // unique identifier for each new comment
+        const newComment = {
+            _id: uuid(),
+            text,
+            user: userId,
+            date: Date.now()
+        };
+
+        await post.comments.unshift(newComment);
+        await post.save();
+
+        return res.status(200).send("Comment has been added");
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server error");
+    }
+});
+
+// delete a comment 
+
+router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
+
+    try {
+
+        const { postId, commentId } = req.params;
+
+        const { userId } = req;
+
+        const post = await PostModel.findById(postId);
+        if (!post) return res.status(404).send("Post not found");
+
+        const comment = post.comments.find(comment => comment._id === commentId);
+        if (!comment) {
+            return res.status(404).send("No Comment found");
+        }
+
+        const user = await UserModel.findById(userId);
+
+        // helper function to help avoid repeating code
+        const deleteComment = async () => {
+          const indexOf = post.comments.map(comment => comment._id).indexOf(commentId);
+   
+          await post.comments.splice(indexOf, 1);
+   
+          await post.save();
+   
+          const postByUserId = post.user.toString();
+   
+          if (postByUserId !== userId) {
+            await removeCommentNotification(postId, commentId, userId, postByUserId);
+          }
+   
+          return res.status(200).send("Successfully deleted comment");
+        };
+   
+        if (comment.user.toString() !== userId) {
+          if (user.role === "root") {
+            await deleteComment();
+          } else {
+            return res.status(401).send("Unauthorized");
+          }
+        }
+         // if user is author of comment 
+        await deleteComment();
+
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send(`Server error`);
+      }
+    });
+   
 
 
 
