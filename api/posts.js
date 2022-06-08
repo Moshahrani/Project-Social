@@ -35,6 +35,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // get all posts 
+
 router.get("/", authMiddleware, async (req, res) => {
 
     try {
@@ -59,6 +60,9 @@ router.get("/:postId", authMiddleware, async (req, res) => {
     try {
 
         const post = await PostModel.findById(req.params.postId)
+            .populate("user")
+            .populate("comments.user");
+
 
         if (!post) {
             return res.status(404).send("Post not found");
@@ -266,37 +270,37 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
 
         // helper function to help avoid repeating code
         const deleteComment = async () => {
-          const indexOf = post.comments.map(comment => comment._id).indexOf(commentId);
-   
-          await post.comments.splice(indexOf, 1);
-   
-          await post.save();
-   
-          const postByUserId = post.user.toString();
-   
-          if (postByUserId !== userId) {
-            await removeCommentNotification(postId, commentId, userId, postByUserId);
-          }
-   
-          return res.status(200).send("Successfully deleted comment");
+            const indexOf = post.comments.map(comment => comment._id).indexOf(commentId);
+
+            await post.comments.splice(indexOf, 1);
+
+            await post.save();
+
+            const postByUserId = post.user.toString();
+
+            if (postByUserId !== userId) {
+                await removeCommentNotification(postId, commentId, userId, postByUserId);
+            }
+
+            return res.status(200).send("Successfully deleted comment");
         };
-   
+
         if (comment.user.toString() !== userId) {
-          if (user.role === "root") {
-            await deleteComment();
-          } else {
-            return res.status(401).send("Unauthorized");
-          }
+            if (user.role === "root") {
+                await deleteComment();
+            } else {
+                return res.status(401).send("Unauthorized");
+            }
         }
-         // if user is author of comment 
+        // if user is author of comment 
         await deleteComment();
 
-      } catch (error) {
+    } catch (error) {
         console.error(error);
         return res.status(500).send(`Server error`);
-      }
-    });
-   
+    }
+});
+
 
 
 
