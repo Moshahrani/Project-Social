@@ -26,7 +26,7 @@ router.post("/", authMiddleware, async (req, res) => {
         if (picUrl) newPost.picUrl = picUrl;
 
         const post = await new PostModel(newPost).save();
-        return res.json(post);
+        return res.json(post._id);
 
     } catch (error) {
         console.error(error);
@@ -63,7 +63,6 @@ router.get("/:postId", authMiddleware, async (req, res) => {
             .populate("user")
             .populate("comments.user");
 
-
         if (!post) {
             return res.status(404).send("Post not found");
         }
@@ -72,7 +71,6 @@ router.get("/:postId", authMiddleware, async (req, res) => {
         console.error(error);
         return res.status(500).send("Server error");
     }
-
 })
 
 // delete post by ID
@@ -132,6 +130,7 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
             return res.status(404).send("No Post Found");
         }
 
+        // check if post has already been liked before 
         const liked = post.likes.filter(like =>
             like.user.toString() === userId).length > 0;
 
@@ -236,11 +235,11 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
             user: userId,
             date: Date.now()
         };
-
+            // add comment to start of array of comments of given post 
         await post.comments.unshift(newComment);
         await post.save();
 
-        return res.status(200).send("Comment has been added");
+        return res.status(200).json(newComment._id);
 
     } catch (error) {
         console.error(error);
@@ -259,16 +258,21 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
         const { userId } = req;
 
         const post = await PostModel.findById(postId);
+        
+        // if no post exists
         if (!post) return res.status(404).send("Post not found");
+        
+        // return found comment for deletion 
 
         const comment = post.comments.find(comment => comment._id === commentId);
+
         if (!comment) {
             return res.status(404).send("No Comment found");
         }
 
         const user = await UserModel.findById(userId);
 
-        // helper function to help avoid repeating code
+        // helper function for deleting comment to help avoid repeating code
         const deleteComment = async () => {
             const indexOf = post.comments.map(comment => comment._id).indexOf(commentId);
 
