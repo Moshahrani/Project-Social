@@ -47,7 +47,8 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             src={post.user.profilePicUrl}
                             avatar
                             circular />
-
+                        {/* checking if user who created 
+                         the post is same as user that is logged in  */}
                         {(user.role === "root" || post.user._id === user._id) && (
                             <>
                                 <Popup on="click"
@@ -65,12 +66,14 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                                 </Popup>
                             </>
                         )}
+
                         {/* link when clicked will redirect user to their profile page */}
                         <Card.Header>
                             <Link href={`/${post.user.username}`}>
                                 <a>{post.user.name}</a>
                             </Link>
                         </Card.Header>
+
                         {/* will display time of post creation */}
                         <Card.Meta>{calculateTime(post.createdAt)}</Card.Meta>
                         {post.location && <Card.Meta content={post.location} />}
@@ -104,17 +107,20 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                         />
 
                         {comments.length > 0 &&
-                            comments.map(comment => (
-                                <PostComments
-                                    key={comment._id}
-                                    comment={comment}
-                                    postId={post._id}
-                                    user={user}
-                                    setComments={setComments}
-                                />
-                            ))}
+                            comments.map((comment, i) =>
+                                i < 3 && (
+                                    <PostComments
+                                        key={comment._id}
+                                        comment={comment}
+                                        postId={post._id}
+                                        user={user}
+                                        setComments={setComments}
+                                    />
+                                )
+                            )}
 
-                        {comments.length &&
+
+                        {comments.length > 3 &&
                             <Button
                                 content="View More"
                                 color="teal"
@@ -122,7 +128,7 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
 
                         <Divider hidden />
 
-                        <CommentInputField
+                        <CommentField
                             user={user}
                             postId={post._id}
                             setComments={setComments}
