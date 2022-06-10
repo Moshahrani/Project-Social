@@ -21,11 +21,22 @@ function CreatePost(user, setPosts) {
             setMediaPreview(URL.createObjectURL(files[0]));
         }
 
+        // returning an object for newPost
         setNewPost(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async e => e.preventDefault();
 
+
+    const addStyles = () => ({
+        textAlign: "center",
+        cursor: "pointer",
+        height: "150px",
+        width: "150px",
+        border: "dotted",
+        paddingTop: media === null && "60px",
+        borderColor: highlight ? "green" : "black"
+    });
 
 
     return <>
@@ -38,6 +49,7 @@ function CreatePost(user, setPosts) {
             />
 
             <Form.Group>
+                {/*  User's profile pic  */}
                 <Image src={user.profilePicUrl}
                     circular
                     avatar
@@ -52,6 +64,8 @@ function CreatePost(user, setPosts) {
                 />
             </Form.Group>
 
+
+            {/* Form for submitting location based information */}
             <Form.Group>
                 <Form.Input value={newPost.location}
                     name="location"
@@ -70,18 +84,32 @@ function CreatePost(user, setPosts) {
                     accept="image/*"
                 />
             </Form.Group>
-
+            
+            {/* Drag and drop functionality */}
             <div
-                style={{
-                    textAlign: "center",
-                    cursor: "pointer",
-                    height: "150px",
-                    width: "150px",
-                    border: "dotted",
-                    paddingTop: media === null && "60px",
-                    borderColor: highlight ? "green" : "black"
-                }}>
+                style={addStyles()}
+                onDrag={e => {
+                    e.preventDefault();
+                    setHighlight(true);
+                }}
+                onDragLeave={e => {
+                    e.preventDefault();
+                    setHighlight(false);
+                }}
+                onDrop={e => {
+                    e.preventDefault();
+                    setHighlight(true);
 
+                  const droppedFile = Array.from(e.dataTransfer.files);
+     
+                  if (droppedFile?.length > 0) {
+                    setMedia(droppedFile[0]);
+                    setMediaPreview(URL.createObjectURL(droppedFile[0]));
+                  }
+                }}
+              >
+
+                {/* // conditional rendering for rendering preview of image user has uploaded */}
                 {media === null ? (
                     <Icon
                         name="plus"
@@ -102,6 +130,7 @@ function CreatePost(user, setPosts) {
             </div>
             <Divider hidden />
 
+            {/* Post button with bold text */}
             <Button
                 circular
                 disabled={newPost.text === "" || loading}
