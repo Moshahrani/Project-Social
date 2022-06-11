@@ -7,34 +7,51 @@ import cookie from "js-cookie";
 // every request
 
 export const Axios = axios.create({
-    baseURL: `${baseUrl}/api/posts`,
-    headers: { Authorization: cookie.get("token") }
+  baseURL: `${baseUrl}/api/posts`,
+  headers: { Authorization: cookie.get("token") }
 });
 
 // new post submit request 
 
 export const submitNewPost = async (
-    text,
-    location,
-    picUrl,
-    setPosts,
-    setNewPost,
-    setError
-  ) => {
+  text,
+  location,
+  picUrl,
+  setPosts,
+  setNewPost,
+  setError
+) => {
 
-    try {
+  try {
 
-      const res = await Axios.post("/", { text, location, picUrl });
-      
-      // adding new post to the top of the array for first render
-      // getting post from backend now
+    const res = await Axios.post("/", { text, location, picUrl });
 
-      setPosts(prev => [res.data, ...prev]);
-      
-      setNewPost({ text: "", location: "" });
+    // adding new post to the top of the array for first render
+    // getting post from backend now
 
-    } catch (error) {
-      const errorMsg = catchErrors(error);
-      setError(errorMsg);
-    }
-  };
+    setPosts(prev => [res.data, ...prev]);
+
+    setNewPost({ text: "", location: "" });
+
+  } catch (error) {
+    const errorMsg = catchErrors(error);
+    setError(errorMsg);
+  }
+};
+
+// new delete post request 
+
+export const deletePost = async (postId, setPosts, setShowToast) => {
+
+  try {
+
+    await Axios.delete(`/${postId}`);
+
+    setPosts(prev => prev.filter(post => post._id !== postId));
+    setShowToast(true);
+
+  } catch (error) {
+    alert(catchErrors(error));
+  }
+};
+
