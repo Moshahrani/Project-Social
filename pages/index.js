@@ -32,7 +32,7 @@ function Index({ user, postsData, errorLoading }) {
           ) : <>
             {
               posts.map(post => (
-                <CardPost
+                <PostLayout
                   key={post._id}
                   post={post}
                   user={user}

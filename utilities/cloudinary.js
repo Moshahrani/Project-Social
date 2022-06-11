@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const uploadImage = async (media) => {
+const uploadImage = async (media) => { 
+   
     try {
         const form = new FormData()
 
@@ -9,8 +10,8 @@ const uploadImage = async (media) => {
         form.append("cloud_name", "moshhh")
 
         const result = await axios.post(process.env.CLOUDINARY_URL, form)
+        console.log(result)
         return result.data.url
-
     } catch (error) {
         return
     }

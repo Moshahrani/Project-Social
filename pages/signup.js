@@ -6,7 +6,7 @@ import SocialProfiles from "../components/Basic/SocialProfiles";
 import ImageBoxDropoff from "../components/Basic/ImageBoxDropoff";
 import baseUrl from "../utilities/baseUrl";
 import { registerUser } from "../utilities/authUser";
-import uploadPic from "../utilities/cloudinary";
+import uploadImage from "../utilities/cloudinary";
 let cancel;
 
 // regex used to authenticate username info
@@ -45,7 +45,7 @@ function Signup() {
 
      let profilePicUrl;
        if (media !== null) {
-           profilePicUrl = await uploadPic(media)
+           profilePicUrl = await uploadImage(media)
        }
 
        if (media !== null && !profilePicUrl) {
