@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Divider, Image, Icon, Message } from "semantic-ui-react";
 import uploadImage from "../../utilities/cloudinary";
-import { submitNewPost } from "../../utilities/postActions";
+import { submitNewPost } from "../../utilities/postEvents";
 
 function CreatePost(user, setPosts) {
 
