@@ -40,7 +40,6 @@ function CreatePost(user, setPosts) {
         }
 
         await submitNewPost(
-            user,
             newPost.text,
             newPost.location,
             picUrl,
@@ -113,6 +112,7 @@ function CreatePost(user, setPosts) {
 
             {/* Drag and drop functionality */}
             <div
+              onClick={() => inputRef.current.click()}
                 style={addStyles()}
                 onDrag={e => {
                     e.preventDefault();

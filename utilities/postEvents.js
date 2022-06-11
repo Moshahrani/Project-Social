@@ -14,7 +14,6 @@ export const Axios = axios.create({
 // new post submit request 
 
 export const submitNewPost = async (
-    user,
     text,
     location,
     picUrl,
@@ -23,21 +22,14 @@ export const submitNewPost = async (
     setError
   ) => {
 
-
     try {
 
       const res = await Axios.post("/", { text, location, picUrl });
       
-    
-      const newPost = {
-        ...res.data,
-        user,
-        likes: [],
-        comments: []
-      };
       // adding new post to the top of the array for first render
+      // getting post from backend now
 
-      setPosts(prev => [newPost, ...prev]);
+      setPosts(prev => [res.data, ...prev]);
       
       setNewPost({ text: "", location: "" });
 
