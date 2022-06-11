@@ -112,7 +112,7 @@ function CreatePost(user, setPosts) {
 
             {/* Drag and drop functionality */}
             <div
-              onClick={() => inputRef.current.click()}
+                onClick={() => inputRef.current.click()}
                 style={addStyles()}
                 onDrag={e => {
                     e.preventDefault();
