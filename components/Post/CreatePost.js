@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Divider, Image, Icon, Message } from "semantic-ui-react";
 import uploadImage from "../../utilities/cloudinary";
+import { submitNewPost } from "../../utilities/postActions";
 
 function CreatePost(user, setPosts) {
 
@@ -25,8 +26,33 @@ function CreatePost(user, setPosts) {
         setNewPost(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async e => e.preventDefault();
+    const handleSubmit = async e => {
+        e.preventDefault();
+        setLoading(true);
+        let picUrl;
 
+        if (media !== null) {
+            picUrl = await uploadPic(media);
+            if (!picUrl) {
+                setLoading(false);
+                return setError("Error Uploading Image");
+            }
+        }
+
+        await submitNewPost(
+            user,
+            newPost.text,
+            newPost.location,
+            picUrl,
+            setPosts,
+            setNewPost,
+            setError
+        );
+
+        setMedia(null);
+        setMediaPreview(null);
+        setLoading(false);
+    };
 
     const addStyles = () => ({
         textAlign: "center",
@@ -84,7 +110,7 @@ function CreatePost(user, setPosts) {
                     accept="image/*"
                 />
             </Form.Group>
-            
+
             {/* Drag and drop functionality */}
             <div
                 style={addStyles()}
@@ -100,20 +126,19 @@ function CreatePost(user, setPosts) {
                     e.preventDefault();
                     setHighlight(true);
 
-                  const droppedFile = Array.from(e.dataTransfer.files);
-     
-                  if (droppedFile?.length > 0) {
-                    setMedia(droppedFile[0]);
-                    setMediaPreview(URL.createObjectURL(droppedFile[0]));
-                  }
+                    const droppedFile = Array.from(e.dataTransfer.files);
+
+                    if (droppedFile?.length > 0) {
+                        setMedia(droppedFile[0]);
+                        setMediaPreview(URL.createObjectURL(droppedFile[0]));
+                    }
                 }}
-              >
+            >
 
                 {/* // conditional rendering for rendering preview of image user has uploaded */}
                 {media === null ? (
                     <Icon
                         name="plus"
-                        onClick={() => inputRef.current.click()}
                         size="big"
                     />) : (
                     <>
@@ -123,7 +148,6 @@ function CreatePost(user, setPosts) {
                             alt="PostImage"
                             centered
                             size="medium"
-                            onClick={() => inputRef.current.click()}
                         />
                     </>
                 )}
