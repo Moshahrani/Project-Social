@@ -55,3 +55,30 @@ export const deletePost = async (postId, setPosts, setShowToast) => {
   }
 };
 
+// like a post 
+
+export const likePost = async (postId, userId, setLikes, like = true) => {
+
+  try {
+         // if like, update like on post 
+    if (like) {
+
+      await Axios.post(`/like/${postId}`);
+
+      setLikes(prev => [...prev, { user: userId }]);
+    }
+    
+    // will filter out likes array and remove like
+    // of user currently logged in
+    
+    else if (!like) {
+      await Axios.put(`/unlike/${postId}`)
+
+      setLikes(prev => prev.filter(like => like.user !== userId));
+    }
+
+  } catch (error) {
+    alert(catchErrors(error))
+  }
+}
+

@@ -14,11 +14,11 @@ import PostComments from "./PostComments";
 import CommentField from "./CommentField";
 import Link from "next/link";
 import calculateTime from "../../utilities/calculateTime";
-import { deletePost } from "../../utilities/postEvents";
+import { deletePost, likePost } from "../../utilities/postEvents";
 
 function PostLayout({ post, user, setPosts, setShowToast }) {
 
-    const [likes, setLIkes] = useState(post.likes);
+    const [likes, setLikes] = useState(post.likes);
 
     // checking if likes exist and filtering to check if user exists with likes array
 
@@ -98,6 +98,9 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             name={liked ? "heart" : "heart outline"}
                             color="red"
                             style={{ cursor: "pointer" }}
+                            // passing onClick method with 4th paramater being a 
+                            // conditional if user has already liked the post or not
+                            onClick={() => likePost(post._id, user._id, setLikes, liked ? false : true)}
                         />
                         {/* conditional rendering of single like or multiple likes  */}
                         {likes.length > 0 && (
