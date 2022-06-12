@@ -219,6 +219,8 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
 
         const { postId } = req.params;
 
+        const { userId } = req
+
         const { text } = req.body;
 
         if (text.length < 1) {

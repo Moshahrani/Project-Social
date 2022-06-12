@@ -127,7 +127,6 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                                 )
                             )}
 
-
                         {comments.length > 3 &&
                             <Button
                                 content="View More"
