@@ -6,6 +6,8 @@ import PostLayout from "../components/Post/PostLayout";
 import { Segment } from "semantic-ui-react";
 import { parseCookies } from "nookies";
 import { NoPosts } from "../components/NoData";
+import { PostDeleteToast } from "../components/Toast";
+import { Axios } from "../utilities/postEvents";
 
 function Index({ user, postsData, errorLoading }) {
 
@@ -15,37 +17,40 @@ function Index({ user, postsData, errorLoading }) {
   useEffect(() => {
     document.title = `Welcome, ${user.name.split(" ")[0]}`;
   }, []);
-
-
-
-
-
+   
+  // when showToast changes to true
+  // show 
+  useEffect(() => {
+    showToast && setTimeout(() => setShowToast(false), 3000);
+  }, [showToast]);
 
   return (
+    <>
+      {showToast && <PostDeleteToast />}
+      <Segment>
+        <CreatePost user={user} setPosts={setPosts} />
 
-        <Segment>
-          <CreatePost user={user} setPosts={setPosts} />
-
-          {/* // message notifying user that no post are available */}
-          {posts.length === 0 || errorLoading ? (
-            <NoPosts />
-          ) : <>
-            {
-              posts.map(post => (
-                <PostLayout
-                  key={post._id}
-                  post={post}
-                  user={user}
-                  setPosts={setPosts}
-                  setShowToast={setShowToast}
-                />
-              ))
-            }
-            </>
+        {/* // message notifying user that no post are available */}
+        {posts.length === 0 || errorLoading ? (
+          <NoPosts />
+        ) : <>
+          {
+            posts.map(post => (
+              <PostLayout
+                key={post._id}
+                post={post}
+                user={user}
+                setPosts={setPosts}
+                setShowToast={setShowToast}
+              />
+            ))
           }
-        </Segment>
-      );
-    };
+        </>
+        }
+      </Segment>
+    </>
+  )
+};
 
 
 Index.getInitialProps = async (ctx) => {

@@ -14,6 +14,7 @@ import PostComments from "./PostComments";
 import CommentField from "./CommentField";
 import Link from "next/link";
 import calculateTime from "../../utilities/calculateTime";
+import { deletePost } from "../../utilities/postEvents";
 
 function PostLayout({ post, user, setPosts, setShowToast }) {
 
@@ -62,7 +63,11 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                                     <Header as="h4" content="Are you sure?" />
                                     <p>This action is irreversible!</p>
 
-                                    <Button color="red" icon="trash" content="Delete" />
+                                    <Button
+                                        color="red"
+                                        icon="trash"
+                                        content="Delete"
+                                        onClick={() => deletePost(post._id, setPosts, setShowToast)} />
                                 </Popup>
                             </>
                         )}
