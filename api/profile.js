@@ -80,3 +80,20 @@ router.get("/followers/:userId", authMiddleware, async (req, res) => {
         return res.status(500).send("Server Error");
     }
 });
+
+// get following of user 
+
+router.get("/following/:userId", authMiddleware, async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const user = await FollowerModel.findOne({ user: userId }).populate(
+            "following.user"
+        );
+
+        return res.json(user.following);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server Error");
+    }
+});
