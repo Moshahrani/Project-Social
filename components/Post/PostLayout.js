@@ -31,8 +31,22 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
     const [comments, setComments] = useState(post.comments);
     const [error, setError] = useState(null);
 
+    const  [showModal, setShowModal] = useState(false);
+
     return (
         <>
+         {/* // showModal with conditional rendering for Image || NoImage Modals */}
+        {showModal && (
+            <Modal 
+            open={showModal} 
+            closeIcon 
+            closeOnDimmerClick 
+            onClose={() => setShowModal(false)}>
+                <Modal.Content>
+                    {post.picUrl ? <ImageModal /> : <NoImageModal />}
+                </Modal.Content>
+            </Modal>
+        )}
             <Segment basic>
                 <Card color="teal" fluid>
                     {post.picUrl && (
@@ -43,6 +57,7 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             wrapped
                             ui={false}
                             alt="PostImage"
+                            onClick={() => setShowModal(true)}
                         />
                     )}
 
@@ -139,7 +154,9 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             <Button
                                 content="View More"
                                 color="teal"
-                                basic circular />}
+                                basic circular
+                                onClick={() => setShowModal(true)}
+                                />}
 
                         <Divider hidden />
 
