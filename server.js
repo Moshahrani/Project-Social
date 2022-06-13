@@ -26,6 +26,7 @@ nextApp.prepare().then(() => {
   app.use("/api/authorization", require("./api/authorization"));
   app.use("/api/search", require("./api/search"));
   app.use("/api/posts", require("./api/posts"));
+  app.use("/api/profile", require("./api/profile"));
   app.all("*", (req, res) => handle(req, res));
 
   httpServer.listen(PORT, err => {
