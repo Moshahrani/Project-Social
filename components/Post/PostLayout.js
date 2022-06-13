@@ -32,6 +32,17 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
     const [error, setError] = useState(null);
 
     const  [showModal, setShowModal] = useState(false);
+    
+    // function to add props to both Image and No Image Modal components
+    const addPropsToModal = () => ({
+        post,
+        user,
+        setLikes,
+        likes,
+        liked,
+        comments,
+        setComments
+    });
 
     return (
         <>
@@ -43,7 +54,7 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
             closeOnDimmerClick 
             onClose={() => setShowModal(false)}>
                 <Modal.Content>
-                    {post.picUrl ? <ImageModal /> : <NoImageModal />}
+                    {post.picUrl ? <ImageModal {...addPropsToModal()} /> : <NoImageModal {...addPropsToModal()} />}
                 </Modal.Content>
             </Modal>
         )}
