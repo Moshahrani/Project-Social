@@ -113,7 +113,7 @@ function CreatePost({ user, setPosts }) {
                         accept="image/*"
                     />
                 </Form.Group>
-
+                
                 {/* Drag and drop functionality */}
                 <div
                     onClick={() => inputRef.current.click()}

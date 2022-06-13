@@ -15,6 +15,7 @@ import CommentField from "./CommentField";
 import Link from "next/link";
 import calculateTime from "../../utilities/calculateTime";
 import { deletePost, likePost } from "../../utilities/postEvents";
+import LikesList from "./LikesList";
 
 function PostLayout({ post, user, setPosts, setShowToast }) {
 
@@ -102,12 +103,17 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             // conditional if user has already liked the post or not
                             onClick={() => likePost(post._id, user._id, setLikes, liked ? false : true)}
                         />
-                        {/* conditional rendering of single like or multiple likes  */}
-                        {likes.length > 0 && (
-                            <span className="spanLikesList">
-                                {`${likes.length} ${likes.length === 1 ? "like" : "likes"}`}
-                            </span>
-                        )}
+                        <LikesList
+                            postId={post._id}
+                            trigger={
+                                /* conditional rendering of single like or multiple likes  */
+                                likes.length > 0 && (
+                                    <span className="spanLikesList">
+                                        {`${likes.length} ${likes.length === 1 ? "like" : "likes"}`}
+                                    </span>
+                                )
+                            }
+                        />
                         <Icon
                             name="comment outline"
                             style={{ marginLeft: "7px" }}
