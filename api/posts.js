@@ -41,13 +41,34 @@ router.post("/", authMiddleware, async (req, res) => {
 
 router.get("/", authMiddleware, async (req, res) => {
 
-    try {
-        // sorting posts in descending order of date creation
-        const posts = await PostModel.find()
-            .sort({ createdAt: -1 })
-            .populate("user")
-            .populate("comments.user");
+    const { pageNumber } = req.query;
 
+    const number = Number(pageNumber);
+    // default size
+    const size = 8;
+
+    try {
+        let posts;
+
+            if (number === 1) {
+             /*   sorting posts in descending order of date creation */
+            posts = await PostModel.find()
+                .limit(size)
+                .sort({ createdAt: -1 })
+                .populate("user")
+                .populate("comments.user");
+        } else {
+
+            // formula to skip over posts sent earlier
+            const skips = size * (number - 1)
+            posts = await PostModel.find()
+                .skip(skips)
+                .limit(size)
+                .sort({ createdAt: -1 })
+                .populate("user")
+                .populate("comments.user");
+        }
+        
         return res.json(posts);
 
     } catch (error) {
@@ -240,7 +261,7 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
             user: userId,
             date: Date.now()
         };
-            // add comment to start of array of comments of given post 
+        // add comment to start of array of comments of given post 
         await post.comments.unshift(newComment);
         await post.save();
 
@@ -263,10 +284,10 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
         const { userId } = req;
 
         const post = await PostModel.findById(postId);
-        
+
         // if no post exists
         if (!post) return res.status(404).send("Post not found");
-        
+
         // return found comment for deletion 
 
         const comment = post.comments.find(comment => comment._id === commentId);
