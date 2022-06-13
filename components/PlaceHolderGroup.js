@@ -28,3 +28,32 @@ export const LikesPlaceHolder = () =>
         </Placeholder>
     )
     );
+
+export const PlaceHolderPosts = () =>
+    genArray(3).map(item => (
+        <div key={item}>
+            <Placeholder fluid>
+                <Placeholder.Header image>
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                </Placeholder.Header>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                </Placeholder.Paragraph>
+            </Placeholder>
+            <Divider hidden />
+        </div>
+    ));
+
+    // no more posts to fetch from the backend
+export const EndMessage = () => (
+    <Container textAlign="center">
+        <Icon name="refresh" size="large" />
+        <Divider hidden />
+    </Container>
+);
+
+
