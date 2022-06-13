@@ -16,6 +16,8 @@ import Link from "next/link";
 import calculateTime from "../../utilities/calculateTime";
 import { deletePost, likePost } from "../../utilities/postEvents";
 import LikesList from "./LikesList";
+import ImageModal from "./ImageModal";
+import NoImageModal from "./NoImageModal";
 
 function PostLayout({ post, user, setPosts, setShowToast }) {
 
