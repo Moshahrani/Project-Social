@@ -11,7 +11,7 @@ const ProfileModel = require("../models/ProfileModel");
 
 router.get("/:username", authMiddleware, async (req, res) => {
 
-    
+
     try {
         const { username } = req.params;
 
@@ -45,7 +45,7 @@ router.get("/:username", authMiddleware, async (req, res) => {
 
 router.get(`/posts/:username`, authMiddleware, async (req, res) => {
 
-    
+
     try {
         const { username } = req.params;
 
@@ -70,7 +70,7 @@ router.get(`/posts/:username`, authMiddleware, async (req, res) => {
 
 router.get("/followers/:userId", authMiddleware, async (req, res) => {
 
-    
+
     try {
         const { userId } = req.params;
 
@@ -107,11 +107,11 @@ router.get("/following/:userId", authMiddleware, async (req, res) => {
 
 router.post("/follow/:userToFollowId", authMiddleware, async (req, res) => {
 
-    
+
     try {
         const { userId } = req;
         const { userToFollowId } = req.params;
-        
+
         const user = await FollowerModel.findOne({ user: userId });
         const userToFollow = await FollowerModel.findOne({ user: userToFollowId });
 
@@ -148,11 +148,10 @@ router.post("/follow/:userToFollowId", authMiddleware, async (req, res) => {
 
 router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
 
-    
     try {
         const { userId } = req;
         const { userToUnfollowId } = req.params;
-        
+
         const user = await FollowerModel.findOne({
             user: userId
         });
@@ -196,5 +195,51 @@ router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send("server error");
+    }
+});
+
+// update profile
+
+router.post("/update", authMiddleware, async (req, res) => {
+
+    try {
+        const { userId } = req;
+        // social media profiles to update or profile pic 
+        const { bio, facebook, youtube, twitter, instagram, profilePicUrl } = req.body;
+
+        let profileFields = {};
+        profileFields.user = userId;
+
+        profileFields.bio = bio;
+
+        profileFields.social = {};
+        
+        if (facebook) profileFields.social.facebook = facebook;
+
+        if (twitter) profileFields.social.twitter = twitter;
+
+        if (instagram) profileFields.social.instagram = instagram;
+
+        if (youtube) profileFields.social.youtube = youtube;
+
+        
+        await ProfileModel.findOneAndUpdate(
+            { user: userId },
+            { $set: profileFields },
+            // only new data will be shown
+            { new: true }
+        );
+        // to update profile pic of user 
+        
+        if (profilePicUrl) {
+            const user = await UserModel.findById(userId);
+            user.profilePicUrl = profilePicUrl;
+            await user.save();
+        }
+
+        return res.status(200).send("Success");
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server Error");
     }
 });
