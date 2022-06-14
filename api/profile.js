@@ -213,7 +213,7 @@ router.post("/update", authMiddleware, async (req, res) => {
         profileFields.bio = bio;
 
         profileFields.social = {};
-        
+
         if (facebook) profileFields.social.facebook = facebook;
 
         if (twitter) profileFields.social.twitter = twitter;
@@ -222,7 +222,7 @@ router.post("/update", authMiddleware, async (req, res) => {
 
         if (youtube) profileFields.social.youtube = youtube;
 
-        
+
         await ProfileModel.findOneAndUpdate(
             { user: userId },
             { $set: profileFields },
@@ -230,7 +230,7 @@ router.post("/update", authMiddleware, async (req, res) => {
             { new: true }
         );
         // to update profile pic of user 
-        
+
         if (profilePicUrl) {
             const user = await UserModel.findById(userId);
             user.profilePicUrl = profilePicUrl;
@@ -238,6 +238,35 @@ router.post("/update", authMiddleware, async (req, res) => {
         }
 
         return res.status(200).send("Success");
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server Error");
+    }
+});
+
+// update user's password 
+
+router.post("/settings/password", authMiddleware, async (req, res) => {
+
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (newPassword.length < 6) {
+            return res.status(400).send("Password must be atleast 6 characters");
+        }
+
+        const user = await UserModel.findById(req.userId).select("+password");
+
+        const isPassword = await bcrypt.compare(currentPassword, user.password);
+        // if password is incorrect
+        if (!isPassword) {
+            return res.status(401).send("Incorrect Password");
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        res.status(200).send("Updated successfully");
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server Error");
