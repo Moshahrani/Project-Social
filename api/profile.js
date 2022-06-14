@@ -14,7 +14,7 @@ router.get("/:username", authMiddleware, async (req, res) => {
     
     try {
         const { username } = req.params;
-        
+
         const user = await UserModel.findOne({ username: username.toLowerCase() })
 
         if (!user) {
@@ -192,7 +192,7 @@ router.put("/unfollow/:userToUnfollowId", authMiddleware, async (req, res) => {
         await userToUnfollow.followers.splice(removeFollower, 1);
         await userToUnfollow.save();
 
-        return res.status(200).send("Updated");
+        return res.status(200).send("Success");
     } catch (error) {
         console.error(error);
         res.status(500).send("server error");
