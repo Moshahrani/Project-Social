@@ -262,13 +262,41 @@ router.post("/settings/password", authMiddleware, async (req, res) => {
         if (!isPassword) {
             return res.status(401).send("Incorrect Password");
         }
-
+        // hash new password - 10 rounds 
         user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
 
-        res.status(200).send("Updated successfully");
+        res.status(200).send("Password updated successfully");
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server Error");
     }
 });
+
+// update message popup notification settings
+
+router.post("/settings/messagePopup", authMiddleware, async (req, res) => {
+
+    try {
+      const user = await UserModel.findById(req.userId);
+      
+      // if newMessagePopup = true, change to false
+      if (user.newMessagePopup) {
+        user.newMessagePopup = false;
+      }
+      // if false, change to true
+      else {
+        user.newMessagePopup = true;
+      }
+      // then save 
+      await user.save();
+      return res.status(200).send("Success");
+      
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send("Server Error");
+    }
+  });
+ 
+  module.exports = router;
+ 
