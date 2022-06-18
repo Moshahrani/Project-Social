@@ -14,7 +14,7 @@ function Profile({
     followingLength,
     errorLoading,
     user,
-    userFollowStats}) {
+    userFollowInfo}) {
 
     const router = useRouter()
 
@@ -27,13 +27,12 @@ function Profile({
     const handleItemClick = item => setActiveItem(item);
 
     // user follow stats information
-    const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowStats);
+    const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowInfo);
 
     // boolean if user is looking at their own account
     // will only show update profile and settings tabs 
     // if own account
-    console.log(profile);
-    const ownAccount = profile.user._id === user._id;
+    const ownAccount = profile?.user._id === user._id;
 
     // if no profile was found
     if (errorLoading) {

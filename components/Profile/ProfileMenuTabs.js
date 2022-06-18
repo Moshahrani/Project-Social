@@ -19,6 +19,7 @@ function ProfileMenuTabs({
                 />
                 {/* // conditional rendering change of follow stats only if 
                 user is on their own profile page  */}
+                {console.log(loggedUserFollowStats)}
                 {ownAccount ? (
                     <>
                         <Menu.Item
