@@ -5,8 +5,12 @@ import baseUrl from "../utilities/baseUrl";
 import cookie from "js-cookie";
 import { parseCookies } from "nookies";
 import { NoProfile } from "../components/NoData";
-import { Grid } from "semantic-ui-react";
+import { Grid, Placeholder } from "semantic-ui-react";
 import ProfileMenuTabs from "../components/Profile/ProfileMenuTabs";
+import ProfileHeader from "../components/Profile/ProfileHeader";
+import { PlaceHolderPosts } from "../components/PlaceHolderGroup";
+import PostLayout from "../components/Post/PostLayout";
+import { PostDeleteToast } from "../components/Toast";
 
 function Profile({
     profile,
@@ -14,7 +18,7 @@ function Profile({
     followingLength,
     errorLoading,
     user,
-    userFollowInfo}) {
+    userFollowInfo }) {
 
     const router = useRouter()
 
@@ -28,6 +32,9 @@ function Profile({
 
     // user follow stats information
     const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowInfo);
+
+    // animation for map
+    const [showToast, setShowToast] = useState(false);
 
     // boolean if user is looking at their own account
     // will only show update profile and settings tabs 
@@ -64,7 +71,14 @@ function Profile({
         getPosts();
     }, []);
 
+    // for toast animation 
+    useEffect(() => {
+        showToast && setTimeout(() => setShowToast(false), 4000);
+    }, [showToast]);
+
     return <>
+
+        {showToast && <PostDeleteToast />}
         <Grid stackable>
             <Grid.Row>
                 <Grid.Column>
@@ -76,6 +90,31 @@ function Profile({
                         ownAccount={ownAccount}
                         loggedUserFollowStats={loggedUserFollowStats}
                     />
+                </Grid.Column>
+            </Grid.Row>
+
+            <Grid.Row>
+                <Grid.Column>
+                    {activeItem === "profile" && (
+                        <>
+                            <ProfileHeader
+                                profile={profile}
+                                ownAccount={ownAccount}
+                                loggedUserFollowStats={loggedUserFollowStats}
+                                setUserFollowStats={setUserFollowStats}
+                            />
+                            {/* // if state is loading, show placeholder posts 
+                           // and check if post length > 0, 
+                           // only then we'll map over it  */}
+                            {loading ? <PlaceHolderPosts /> : posts.length > 0 && posts.map(post => <PostLayout
+                                key={post._id}
+                                post={post}
+                                user={user}
+                                setPosts={setPosts}
+                                setShowToast={setShowToast}
+                            />)}
+                        </>
+                    )}
                 </Grid.Column>
             </Grid.Row>
         </Grid>
