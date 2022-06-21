@@ -14,3 +14,13 @@ export const NoPosts = () => (
 export const NoProfile = () => (
   <Message info icon="meh" header="Hey!" content="No Profile Found." />
 );
+
+// 
+export const NoProfilePosts = () => (
+  <>
+    <Message info icon="meh" header="Sorry"
+      content="User has not posted anything yet!" />
+    <Button icon="long arrow alternate left" content="Go Back"
+      as="a" href="/" />
+  </>
+);

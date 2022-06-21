@@ -106,13 +106,21 @@ function Profile({
                             {/* // if state is loading, show placeholder posts 
                            // and check if post length > 0, 
                            // only then we'll map over it  */}
-                            {loading ? <PlaceHolderPosts /> : posts.length > 0 && posts.map(post => <PostLayout
-                                key={post._id}
-                                post={post}
-                                user={user}
-                                setPosts={setPosts}
-                                setShowToast={setShowToast}
-                            />)}
+                            {loading ? (
+                                <PlaceHolderPosts />
+                            ) : posts.length > 0 ? (
+                                posts.map(post => (
+                                    <PostLayout
+                                        key={post._id}
+                                        post={post}
+                                        user={user}
+                                        setPosts={setPosts}
+                                        setShowToast={setShowToast}
+                                    />
+                                ))
+                            ) : (
+                                <NoProfilePosts />
+                            )}
                         </>
                     )}
                 </Grid.Column>
