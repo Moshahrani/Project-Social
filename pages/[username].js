@@ -4,7 +4,7 @@ import axios from "axios";
 import baseUrl from "../utilities/baseUrl";
 import cookie from "js-cookie";
 import { parseCookies } from "nookies";
-import { NoProfile } from "../components/NoData";
+import { NoProfile, NoProfilePosts } from "../components/NoData";
 import { Grid, Placeholder } from "semantic-ui-react";
 import ProfileMenuTabs from "../components/Profile/ProfileMenuTabs";
 import ProfileHeader from "../components/Profile/ProfileHeader";
