@@ -11,6 +11,8 @@ import ProfileHeader from "../components/Profile/ProfileHeader";
 import { PlaceHolderPosts } from "../components/PlaceHolderGroup";
 import PostLayout from "../components/Post/PostLayout";
 import { PostDeleteToast } from "../components/Toast";
+import Followers from "../components/Profile/Followers";
+import Following from "../components/Profile/Following";
 
 function Profile({
     profile,
@@ -124,6 +126,25 @@ function Profile({
                             )}
                         </>
                     )}
+                    {/* // will render followers tab component when clicked  */}
+                    {activeItem === "followers" && (
+                        <Followers
+                            user={user}
+                            loggedUserFollowStats={loggedUserFollowStats}
+                            setUserFollowStats={setUserFollowStats}
+                            profileUserId={profile.user._id}
+                        />
+                    )}
+                      {/* // will render following tab component when clicked  */}
+                    {activeItem === "following" && (
+                        <Following
+                            user={user}
+                            loggedUserFollowStats={loggedUserFollowStats}
+                            setUserFollowStats={setUserFollowStats}
+                            profileUserId={profile.user._id}
+                        />
+                    )}
+
                 </Grid.Column>
             </Grid.Row>
         </Grid>
