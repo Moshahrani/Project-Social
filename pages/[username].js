@@ -69,6 +69,7 @@ function Profile({
         };
         // call getPosts when component mounts 
         getPosts();
+        // whenever username changes, render posts of that user
     }, [router.query.username]);
 
     // for toast animation 
