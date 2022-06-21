@@ -69,7 +69,7 @@ function Profile({
         };
         // call getPosts when component mounts 
         getPosts();
-    }, []);
+    }, [router.query.username]);
 
     // for toast animation 
     useEffect(() => {
