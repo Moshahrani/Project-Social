@@ -7,7 +7,8 @@ function ImageBoxDropoff({ highlight,
     handleChange,
     mediaPreview,
     setMediaPreview,
-    setMedia
+    setMedia,
+    profilePicUrl
 }) {
     return (
         <>

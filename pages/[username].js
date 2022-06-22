@@ -13,6 +13,7 @@ import PostLayout from "../components/Post/PostLayout";
 import { PostDeleteToast } from "../components/Toast";
 import Followers from "../components/Profile/Followers";
 import Following from "../components/Profile/Following";
+import UpdateProfile from "../components/Profile/UpdateProfile";
 
 function Profile({
     profile,
@@ -135,7 +136,7 @@ function Profile({
                             profileUserId={profile.user._id}
                         />
                     )}
-                      {/* // will render following tab component when clicked  */}
+                    {/* // will render following tab component when clicked  */}
                     {activeItem === "following" && (
                         <Following
                             user={user}
@@ -144,6 +145,8 @@ function Profile({
                             profileUserId={profile.user._id}
                         />
                     )}
+                    {/* // update profile tab will render when active */}
+                    {activeItem === "updateProfile" && <UpdateProfile Profile={profile} />}
 
                 </Grid.Column>
             </Grid.Row>
