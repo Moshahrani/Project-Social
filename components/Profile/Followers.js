@@ -5,6 +5,7 @@ import Spinner from "../Spinner";
 import axios from "axios";
 import baseUrl from "../../utilities/baseUrl";
 import cookie from "js-cookie";
+import { followUser, unfollowUser } from "../../utilities/profileEvents";
 
 function Followers({
     user,
@@ -64,6 +65,15 @@ function Followers({
                                             content={isFollowing ? "Following" : "Follow"}
                                             // if state changes to follow or unfollow user
                                             disabled={followLoading}
+                                            onClick={async () => {
+                                                setFollowLoading(true);
+
+                                                isFollowing
+                                                    ? await unfollowUser(profileFollower.user._id, setUserFollowStats)
+                                                    : await followUser(profileFollower.user._id, setUserFollowStats);
+
+                                                setFollowLoading(false);
+                                            }}
                                         />
                                     )}
                                 </List.Content>
