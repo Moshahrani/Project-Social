@@ -47,35 +47,86 @@ router.get("/", authMiddleware, async (req, res) => {
     // default size
     const size = 8;
 
+    // new portion
+
+    const { userId } = req;
+
     try {
-        let posts;
+        const number = Number(pageNumber);
+        const size = 8;
+        const { userId } = req;
 
-            if (number === 1) {
-             /*   sorting posts in descending order of date creation */
-            posts = await PostModel.find()
-                .limit(size)
-                .sort({ createdAt: -1 })
-                .populate("user")
-                .populate("comments.user");
-        } else {
+        // return back following only 
+        // to see only following user's posts in feed (not followers)
+        const loggedUser = await FollowerModel.findOne({ user: userId }).select(
+            "-followers"
+        );
 
-            // formula to skip over posts sent earlier
-            const skips = size * (number - 1)
-            posts = await PostModel.find()
-                .skip(skips)
-                .limit(size)
-                .sort({ createdAt: -1 })
-                .populate("user")
-                .populate("comments.user");
+        let posts = [];
+        // if page 1 (pagination in frontend)
+        if (number === 1) {
+            // if logged in user is following at least one user 
+            if (loggedUser.following.length > 0) {
+                posts = await PostModel.find({
+                    user: {    // mapping all users the user is following and spreading to 
+                        // mongo db "in" operator all users and their posts
+                        $in: [userId, ...loggedUser.following.map(following => following.user)]
+                    }
+                })
+                    .limit(size)
+                    .sort({ createdAt: -1 })
+                    .populate("user")
+                    .populate("comments.user");
+            }
+            // if user is not following anyone, and still page 1
+            // return user's own posts
+            else {
+                posts = await PostModel.find({ user: userId })
+                    .limit(size)
+                    .sort({ createdAt: -1 })
+                    .populate("user")
+                    .populate("comments.user");
+            }
         }
-        
-        return res.json(posts);
 
+        // if page number is greater than 1
+        else {
+            // skip variable to skip over the posts we 
+            // have already sent 
+            const skips = size * (number - 1);
+
+            if (loggedUser.following.length > 0) {
+                posts = await PostModel.find({
+                    user: {
+                        $in: [userId, ...loggedUser.following.map(following => following.user)]
+                    }
+                })
+                    .skip(skips)
+                    .limit(size)
+                    .sort({ createdAt: -1 })
+                    .populate("user")
+                    .populate("comments.user");
+            }
+            // if greater than page 1 && user is following no one
+            else {
+                posts = await PostModel.find({ user: userId })
+                    .skip(skips)
+                    .limit(size)
+                    .sort({ createdAt: -1 })
+                    .populate("user")
+                    .populate("comments.user");
+            }
+        }
+
+        return res.json(posts);
     } catch (error) {
         console.error(error);
-        return res.status(500).send("Server error");
+        return res.status(500).send(`Server error`);
     }
 });
+
+
+
 
 // get post by ID
 
