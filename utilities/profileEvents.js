@@ -1,6 +1,6 @@
 import axios from "axios";
 import baseUrl from "./baseUrl";
-import catchError from "./catchErrors";
+import catchErrors from "./catchErrors";
 import cookie from "js-cookie";
 import Router from "next/router";
 
@@ -69,8 +69,10 @@ export const profileUpdate = async (profile, setLoading, setError, profilePicUrl
   
   // password update async func to backend
   export const passwordUpdate = async (setSuccess, userPasswords) => {
-    const { currentPassword, newPassword } = userPasswords;
+    
     try {
+      const { currentPassword, newPassword } = userPasswords;
+
       await Axios.post(`/settings/password`, { currentPassword, newPassword });
  
       setSuccess(true);

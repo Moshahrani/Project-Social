@@ -5,7 +5,7 @@ const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
 const ProfileModel = require("../models/ProfileModel");
-
+const bcrypt = require("bcryptjs");
 
 // get profile Info
 
@@ -266,7 +266,7 @@ router.post("/settings/password", authMiddleware, async (req, res) => {
         user.password = await bcrypt.hash(newPassword, 10);
         await user.save();
 
-        res.status(200).send("Password updated successfully");
+        return res.status(200).send("Password updated successfully");
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server Error");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Checkbox, Divider, Form, List, Message } from "semantic-ui-react";
-import { passwordUpdate, toggleMessagePopup } from "../../utilities/profileEvents";
+import { passwordUpdate } from "../../utilities/profileEvents";
 
 function Settings({ newMessagePopup }) {
 
@@ -58,18 +58,18 @@ function Settings({ newMessagePopup }) {
                             content="Show New Message Popup?"
                         />
                     </List.Content>
-                    
+
                     {showMsgSettings && (
-                    <div style={{ marginTop: "10px" }}>
-                        Control whether a Popup should appear when there is a New Message or not.
-                        <br />
-                        <br />
-                        <Checkbox
-                            checked={popupSetting}
-                            toggle
-                            onChange={() => {}}
-                        />
-                    </div>
+                        <div style={{ marginTop: "10px" }}>
+                            Control whether a Popup should appear when there is a New Message or not.
+                            <br />
+                            <br />
+                            <Checkbox
+                                checked={popupSetting}
+                                toggle
+                                onChange={() => { }}
+                            />
+                        </div>
                     )}
                 </List.Item>
 
@@ -113,7 +113,15 @@ const UpdatePassword = ({ setSuccess, setShowUpdatePassword }) => {
             <Form
                 error={errorMsg !== null}
                 loading={loading}
-                onSubmit={e => e.preventDefault()}>
+                onSubmit={async e => {
+                    e.preventDefault();
+                    setLoading()
+
+                    await passwordUpdate(setSuccess, userPasswords);
+                    setLoading(false);
+
+                    setShowUpdatePassword(false);
+                }}>
                 <List.List>
                     <List.Item>
                         {/* Form field for current password */}
