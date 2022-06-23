@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Checkbox, Divider, Form, List, Message } from "semantic-ui-react";
-import { passwordUpdate } from "../../utilities/profileEvents";
+import { passwordUpdate, toggleMessagePopup } from "../../utilities/profileEvents";
 
 function Settings({ newMessagePopup }) {
 
@@ -67,7 +67,8 @@ function Settings({ newMessagePopup }) {
                             <Checkbox
                                 checked={popupSetting}
                                 toggle
-                                onChange={() => { }}
+                                onChange={() => 
+                                    toggleMessagePopup(popupSetting, setPopupSetting, setSuccess)}
                             />
                         </div>
                     )}
