@@ -5,6 +5,7 @@ import SocialProfiles from "../Basic/SocialProfiles";
 import uploadImage from "../../utilities/cloudinary";
 import { profileUpdate } from "../../utilities/profileEvents";
 
+
 function UpdateProfile({ Profile }) {
     const [profile, setProfile] = useState({
         profilePicUrl: Profile.user.profilePicUrl,
@@ -41,7 +42,7 @@ function UpdateProfile({ Profile }) {
     };
 
     return (
-        <>
+        <>  {/*  form to upload new profile image */}
             <Form
                 error={errorMsg !== null}
                 loading={loading}
@@ -55,12 +56,11 @@ function UpdateProfile({ Profile }) {
                         profilePicUrl = await uploadImage
                             (media);
                     }
-
                     if (media !== null && !profilePicUrl) {
                         setLoading(false);
                         return setErrorMsg("Error Uploading Image");
                     }
-
+                    
                     await profileUpdate(profile, setLoading, setErrorMsg, profilePicUrl);
                 }}
             >

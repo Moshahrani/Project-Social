@@ -2,6 +2,8 @@ import axios from "axios";
 import baseUrl from "./baseUrl";
 import catchError from "./catchErrors";
 import cookie from "js-cookie";
+import Router from "next/router";
+
 
 export const Axios = axios.create({
     baseURL: `${baseUrl}/api/profile`,
@@ -43,21 +45,22 @@ export const unfollowUser = async (userToUnfollowId, setUserFollowStats) => {
     }
 };
 
+// profileUpdate function to update new information to backend
 export const profileUpdate = async (profile, setLoading, setError, profilePicUrl) => {
     try {
-      const { bio, facebook, youtube, twitter, instagram } = profile;
+      const { bio, facebook, instagram, youtube, twitter } = profile;
  
       await Axios.post(`/update`, {
         bio,
         facebook,
+        instagram,
         youtube,
         twitter,
-        instagram,
         profilePicUrl
       });
  
       setLoading(false);
-      window.location.reload();
+      Router.reload();
     } catch (error) {
       setError(catchErrors(error));
       setLoading(false);
