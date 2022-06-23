@@ -14,6 +14,7 @@ import { PostDeleteToast } from "../components/Toast";
 import Followers from "../components/Profile/Followers";
 import Following from "../components/Profile/Following";
 import UpdateProfile from "../components/Profile/UpdateProfile";
+import Settings from "../components/Profile/Settings";
 
 function Profile({
     profile,
@@ -147,6 +148,7 @@ function Profile({
                     )}
                     {/* // update profile tab will render when active */}
                     {activeItem === "updateProfile" && <UpdateProfile Profile={profile} />}
+                    {activeItem === "settings" && (<Settings newMessagePopup={user.newMessagePopup} />)}
 
                 </Grid.Column>
             </Grid.Row>
