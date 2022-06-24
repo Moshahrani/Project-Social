@@ -42,9 +42,9 @@ export const newLikeNotification = async (userId, postId, userToNotifyId) => {
 export const removeLikeNotification = async (userId, postId, userToNotifyId) => {
 
     try {
-         // using pull operator to remove the notification 
-         // from notifications array
-       
+        // using pull operator to remove the notification 
+        // from notifications array
+
         await NotificationModel.findOneAndUpdate(
             { user: userToNotifyId },
             {
@@ -65,7 +65,7 @@ export const removeLikeNotification = async (userId, postId, userToNotifyId) => 
 };
 
 // notify user when a new comment appears in their post
- export const newCommentNotification = async (
+export const newCommentNotification = async (
     postId,
     commentId,
     userId,
@@ -121,5 +121,44 @@ export const removeCommentNotification = async (postId, commentId, userId, userT
     }
 };
 
+// notify user of a new follower 
+export const newFollowerNotification = async (userId, userToNotifyId) => {
 
+    try {
+        const user = await NotificationModel.findOne({ user: userToNotifyId });
+
+        const newNotification = {
+            type: "newFollower",
+            user: userId,
+            date: Date.now()
+        };
+
+        await user.notifications.unshift(newNotification);
+
+        await user.save();
+
+        await setNotificationToUnread(userToNotifyId);
+        return;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+// notify user of when a follower unfollows 
+export const removeFollowerNotification = async (userId, userToNotifyId) => {
+
+    try {
+          //   pull operator removes all instances of a value
+           //  from ar existing array
+        await NotificationModel.findOneAndUpdate(
+            { user: userToNotifyId },
+            
+            { $pull: { notifications: { type: "newFollower", user: userId } } }
+        );
+
+        return;
+    } catch (error) {
+        console.error(error);
+    }
+};
 
