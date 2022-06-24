@@ -5,7 +5,12 @@ const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
 const uuid = require("uuid").v4;
-const { newLikeNotification, removeLikeNotification } = require("../utilities/notificationEvents");
+const { 
+    newLikeNotification, 
+    removeLikeNotification, 
+    newCommentNotification, 
+    removeCommentNotification 
+} = require("../utilities/notificationEvents");
 
 // creating a post
 
@@ -264,7 +269,7 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
         // if user is unliking their own post, no notification 
         // will be sent to them
         if (post.user.toString() !== userId) {
-            await newLikeNotification(userId, postId, post.user.toString());
+             await removeLikeNotification(userId, postId, post.user.toString());
         }
 
         return res.status(200).send("Post Unliked")
@@ -325,9 +330,20 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
             user: userId,
             date: Date.now()
         };
+
         // add comment to start of array of comments of given post 
         await post.comments.unshift(newComment);
         await post.save();
+
+        if (post.user.toString() !== userId) {
+            await newCommentNotification(
+                postId, 
+                newComment._id, 
+                userId, 
+                post.user.toString(), 
+                text
+                )
+        }
 
         return res.status(200).json(newComment._id);
 
@@ -370,10 +386,10 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
 
             await post.save();
 
-            const postByUserId = post.user.toString();
+            
 
-            if (postByUserId !== userId) {
-                await removeCommentNotification(postId, commentId, userId, postByUserId);
+            if (post.user.toString() !== userId) {
+                await removeCommentNotification(postId, commentId, userId, post.user.toString());
             }
 
             return res.status(200).send("Successfully deleted comment");
