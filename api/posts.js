@@ -5,6 +5,7 @@ const UserModel = require("../models/UserModel");
 const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
 const uuid = require("uuid").v4;
+const { newLikeNotification, removeLikeNotification } = require("../utilities/notificationEvents");
 
 // creating a post
 
@@ -215,6 +216,12 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
 
         await post.likes.unshift({ user: userId });
         await post.save();
+        
+        // if user is liking their own post, no notification 
+        // will be sent to them
+        if (post.user.toString() !== userId) {
+            await newLikeNotification(userId, postId, post.user.toString());
+        }
 
         return res.status(200).send("Liked the Post")
     } catch (error) {
@@ -253,6 +260,12 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
         await post.likes.splice(index, 1);
 
         await post.save();
+
+        // if user is unliking their own post, no notification 
+        // will be sent to them
+        if (post.user.toString() !== userId) {
+            await newLikeNotification(userId, postId, post.user.toString());
+        }
 
         return res.status(200).send("Post Unliked")
     } catch (error) {
