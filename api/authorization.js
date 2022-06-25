@@ -55,10 +55,10 @@ router.post("/", async (req, res) => {
 
         // checking if user has a notification model
         const notificationModel = await NotificationModel.findOne({ user: user._id })
-        
+
         // adding a notification model if user doesn't have one
         if (!notificationModel) {
-            await new notificationModel({ user: user._id, notifications: [] }).save();
+            await new NotificationModel({ user: user._id, notifications: [] }).save();
         }        
 
 

@@ -37,3 +37,9 @@ export const NoFollowData = ({ followersComponent, followingComponent }) => (
     )}
   </>
 );
+
+// letting user know that no notifications are available
+export const NoNotifications = () => (
+  <Message content="No Notifications" icon="smile" info />
+);
+

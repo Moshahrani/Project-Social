@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 const UserModel = require("../models/UserModel");
-const FollowerModel = require("../models/FollowerModel");
 const PostModel = require("../models/PostModel");
+const FollowerModel = require("../models/FollowerModel");
 const uuid = require("uuid").v4;
 const { 
     newLikeNotification, 
@@ -130,8 +130,6 @@ router.get("/", authMiddleware, async (req, res) => {
         return res.status(500).send(`Server error`);
     }
 });
-
-
 
 
 // get post by ID
@@ -385,8 +383,6 @@ router.delete("/:postId/:commentId", authMiddleware, async (req, res) => {
             await post.comments.splice(indexOf, 1);
 
             await post.save();
-
-            
 
             if (post.user.toString() !== userId) {
                 await removeCommentNotification(postId, commentId, userId, post.user.toString());
