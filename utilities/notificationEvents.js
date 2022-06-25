@@ -1,7 +1,7 @@
 const UserModel = require("../models/UserModel");
 const NotificationModel = require("../models/NotificationModel");
 
-export const setNotificationToUnread = async userId => {
+ const setNotificationToUnread = async userId => {
     try {
         const user = await UserModel.findById(userId);
 
@@ -17,7 +17,7 @@ export const setNotificationToUnread = async userId => {
 };
 
 // notify user of post when a new like occurs 
-export const newLikeNotification = async (userId, postId, userToNotifyId) => {
+ const newLikeNotification = async (userId, postId, userToNotifyId) => {
     try {
         const userToNotify = await NotificationModel.findOne({ user: userToNotifyId });
 
@@ -39,7 +39,7 @@ export const newLikeNotification = async (userId, postId, userToNotifyId) => {
 };
 
 // notify user of their post when unliked by another user
-export const removeLikeNotification = async (userId, postId, userToNotifyId) => {
+ const removeLikeNotification = async (userId, postId, userToNotifyId) => {
 
     try {
         // using pull operator to remove the notification 
@@ -65,7 +65,7 @@ export const removeLikeNotification = async (userId, postId, userToNotifyId) => 
 };
 
 // notify user when a new comment appears in their post
-export const newCommentNotification = async (
+ const newCommentNotification = async (
     postId,
     commentId,
     userId,
@@ -99,7 +99,7 @@ export const newCommentNotification = async (
 };
 
 // notify user when another user removes a comment from their post 
-export const removeCommentNotification = async (postId, commentId, userId, userToNotifyId) => {
+ const removeCommentNotification = async (postId, commentId, userId, userToNotifyId) => {
     try {
         await NotificationModel.findOneAndUpdate(
             { user: userToNotifyId },
@@ -122,7 +122,7 @@ export const removeCommentNotification = async (postId, commentId, userId, userT
 };
 
 // notify user of a new follower 
-export const newFollowerNotification = async (userId, userToNotifyId) => {
+ const newFollowerNotification = async (userId, userToNotifyId) => {
 
     try {
         const user = await NotificationModel.findOne({ user: userToNotifyId });
@@ -145,7 +145,7 @@ export const newFollowerNotification = async (userId, userToNotifyId) => {
 };
 
 // notify user of when a follower unfollows 
-export const removeFollowerNotification = async (userId, userToNotifyId) => {
+ const removeFollowerNotification = async (userId, userToNotifyId) => {
 
     try {
           //   pull operator removes all instances of a value
@@ -162,3 +162,11 @@ export const removeFollowerNotification = async (userId, userToNotifyId) => {
     }
 };
 
+module.exports= {setNotificationToUnread,
+    newLikeNotification,
+    removeLikeNotification,
+    newCommentNotification,
+    removeCommentNotification,
+    newFollowerNotification,
+    removeFollowerNotification
+}

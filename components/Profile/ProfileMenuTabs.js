@@ -19,12 +19,12 @@ function ProfileMenuTabs({
                 />
                 {/* // conditional rendering change of follow stats only if 
                 user is on their own profile page  */}
-                {console.log(loggedUserFollowStats)}
+                
                 {ownAccount ? (
                     <>
                         <Menu.Item
-                            name={`${loggedUserFollowStats.following.length > 0
-                                ? loggedUserFollowStats.following.length
+                            name={`${loggedUserFollowStats.followers.length > 0
+                                ? loggedUserFollowStats.followers.length
                                 : 0
                                 } Followers`}
                             active={activeItem === "followers"}
