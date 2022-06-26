@@ -21,7 +21,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     // variable for protected routes
     const protectedRoutes = 
     ctx.pathname === "/" || 
-    ctx.pathname === "/[username]"
+    ctx.pathname === "/[username]" ||
     ctx.pathname === "/notifications";
 
     // if there's no token and user is trying to access protectedRoutes
