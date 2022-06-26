@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router();
 const UserModel = require("../models/UserModel")
 const FollowerModel = require("../models/FollowerModel");
-const NotificationModel = require("../models/NotificationModel");
+const ChatModel = require("../models/ChatModel");
 const jsonwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const isEmail = require("validator/lib/isEmail");
@@ -53,14 +53,13 @@ router.post("/", async (req, res) => {
             return res.status(401).send("Invalid Credentials")
         };  
 
-        // checking if user has a notification model
-        const notificationModel = await NotificationModel.findOne({ user: user._id })
+        // checking if user has a chat model
+        const chatModel = await ChatModel.findOne({ user: user._id })
 
-        // adding a notification model if user doesn't have one
-        if (!notificationModel) {
-            await new NotificationModel({ user: user._id, notifications: [] }).save();
+        // adding a chat model if user doesn't have one
+        if (!chatModel) {
+            await new ChatModel({ user: user._id, chats: [] }).save();
         }        
-
 
         // sending token back to frontend 
 
