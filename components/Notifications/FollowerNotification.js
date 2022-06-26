@@ -9,16 +9,19 @@ function FollowerNotification({
     loggedUserFollowStats,
     setUserFollowStats
 }) {
+    
     const [disabled, setDisabled] = useState(false);
-
+    
+    // notification.user compared with following.user to check if we are 
+    // following the user with the notification or not
     const isFollowing =
-        loggedUserFollowStats.following.length > 0 &&
+        loggedUserFollowStats?.following.length > 0 &&
         loggedUserFollowStats.following.filter(
             following => following.user === notification.user._id
         ).length > 0;
 
     return (
-        <>
+        <> 
             <Feed.Event>
                 <Feed.Label image={notification.user.profilePicUrl} />
                 <Feed.Content>
@@ -31,7 +34,7 @@ function FollowerNotification({
                             <Feed.Date>{calculateTime(notification.date)}</Feed.Date>
                         </>
                     </Feed.Summary>
-
+                    {/* div with button to allow current user to follow user from notification */}
                     <div style={{ position: "absolute", right: "5px" }}>
                         <Button
                             size="small"

@@ -43,3 +43,7 @@ export const NoNotifications = () => (
   <Message content="No Notifications" icon="smile" info />
 );
 
+// letting user know no post was found
+export const NoPostFound = () => (
+  <Message info icon="meh" header="Hey!" content="No Post Found." />
+);

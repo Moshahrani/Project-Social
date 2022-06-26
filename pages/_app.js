@@ -22,7 +22,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     const protectedRoutes = 
     ctx.pathname === "/" || 
     ctx.pathname === "/[username]" ||
-    ctx.pathname === "/notifications";
+    ctx.pathname === "/notifications" ||
+    ctx.pathname === "/post/[postId]";
 
     // if there's no token and user is trying to access protectedRoutes
     // we will redirect user back to login page

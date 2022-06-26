@@ -10,7 +10,6 @@ import CommentNotification from "../components/Notifications/CommentNotification
 import FollowerNotification from "../components/Notifications/FollowerNotification";
 
 function Notifications({ notifications, errorLoading, user, userFollowStats }) {
-    console.log(notifications)
 
     const [loggedUserFollowStats, setUserFollowStats] = useState(userFollowStats);
 

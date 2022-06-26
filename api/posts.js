@@ -145,7 +145,7 @@ router.get("/:postId", authMiddleware, async (req, res) => {
         if (!post) {
             return res.status(404).send("Post not found");
         }
-
+        return res.json(post); 
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Checkbox, Divider, Form, List, Message } from "semantic-ui-react";
 import { passwordUpdate, toggleMessagePopup } from "../../utilities/profileEvents";
 
@@ -9,9 +9,6 @@ function Settings({ newMessagePopup }) {
 
     const [showMsgSettings, setShowMsgSettings] = useState(false);
     const [popupSetting, setPopupSetting] = useState(newMessagePopup);
-
-    const isFirst = useRef(true);
-
 
     useEffect(() => {
         success && setTimeout(() => setSuccess(false), 3000);

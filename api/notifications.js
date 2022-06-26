@@ -35,7 +35,7 @@ router.post("/", authMiddleware, async (req, res) => {
             await user.save();
         }
         
-        return res.status(200).send("Updated");
+        return res.status(200).send("Updated Successfully");
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server Error");
