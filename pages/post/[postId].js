@@ -46,7 +46,7 @@ function Post({ post, errorLoading, user }) {
                             src={post.user.profilePicUrl}
                             avatar
                             circular />
-                             {/* link when clicked will redirect user to their profile page */}
+                        {/* link when clicked will redirect user to their profile page */}
                         <Card.Header>
                             <Link href={`/${post.user.username}`}>
                                 <a>{post.user.name}</a>
