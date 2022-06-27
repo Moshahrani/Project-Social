@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import baseUrl from "../utilities/baseUrl";
@@ -14,7 +14,9 @@ function Messages({ chatsData, user }) {
     const router = useRouter();
     
     useEffect(() => {
-        if (chats.length > 0)
+          // if there's no query string inside URL, 
+          // only then we'll push user to first chat
+        if (chats.length > 0 && !router.query.message)
           router.push(`/messages?message=${chats[0].messageWith}`, undefined, {
             shallow: true
           });
@@ -31,7 +33,7 @@ function Messages({ chatsData, user }) {
             <Divider hidden />
 
             <div style={{ marginBottom: "10px" }}>
-                <ChatListSearch user={user} chats={chats} setChats={setChats} />
+                <ChatListSearch chats={chats} setChats={setChats} />
             </div>
 
             {chats.length > 0 ? <>
