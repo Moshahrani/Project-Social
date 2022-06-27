@@ -47,3 +47,13 @@ export const NoNotifications = () => (
 export const NoPostFound = () => (
   <Message info icon="meh" header="Hey!" content="No Post Found." />
 );
+
+// letting user know there's no messages available
+export const NoMessages = () => (
+  <Message
+    info
+    icon="telegram plane"
+    header="Sorry"
+    content="You have not messaged anyone yet. Search above to message someone!"
+  />
+);
