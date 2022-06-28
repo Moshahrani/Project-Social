@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import io from "socket.io-client";
 import { useRouter } from "next/router";
 import baseUrl from "../utilities/baseUrl";
 import { parseCookies } from "nookies";
@@ -11,9 +12,32 @@ import { NoMessages } from "../components/NoData";
 function Messages({ chatsData, user }) {
 
     const [chats, setChats] = useState(chatsData)
+
+    // use this to check if user is online or not
+    const [connectedUsers, setConnectedUsers] = useState([]);
+
     const router = useRouter();
+
+    const socket = useRef();
+
     
     useEffect(() => {
+
+        // ref has current property
+        // connecting with server by calling "io"
+        if (!socket.current) {
+            socket.current = io(baseUrl)
+        }
+
+        if (socket.current) {
+
+            socket.current.emit("join", { userId: user._id })
+             // listening to event, sending users
+            socket.current.on("connectedUsers", ({ users }) => {
+                users.length > 0 && setConnectedUsers(users);
+            })
+        }
+
           // if there's no query string inside URL, 
           // only then we'll push user to first chat
         if (chats.length > 0 && !router.query.message)
@@ -21,6 +45,14 @@ function Messages({ chatsData, user }) {
             shallow: true
           });
     }, []);
+
+    return () => {
+
+        if (socket.current) {
+            socket.current.emit("disconnect")
+            socket.current.off()
+        }
+    }
 
     return (
         <Segment basic padded size="large" style={{ marginTop: "5px" }}>
@@ -45,6 +77,7 @@ function Messages({ chatsData, user }) {
                                 <Segment raised style={{ overflow: "auto", maxHeight: "32rem" }}>
                                     {chats.map((chat, i) => (
                                         <Chat
+                                            connectedUsers={connectedUsers}
                                             key={i}
                                             chat={chat}
                                             setChats={setChats}
