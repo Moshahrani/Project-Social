@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const { addUser, removeUser } = require("./utilities/socialEvents");
+const { loadMessages } = require("./utilities/messageEvents");
+
 
 io.on("connection", socket => {
 
@@ -34,10 +36,18 @@ io.on("connection", socket => {
       })
     }, 10000)
   });
+
+  socket.on("loadMessages", async ({ userId, messagesWith }) => {
+
+    const { chat, error } = await loadMessages(userId, messagesWith);
+
+    if (!error) {
+      socket.emit("messagesLoaded", { chat });
+    }
+  });
+
   // pass client/user's Id and remove it from the array
   socket.on("disconnect", () => removeUser(socket.id));
-    console.log("User disconnected")
-
 });
 
 nextApp.prepare().then(() => {

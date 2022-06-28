@@ -8,19 +8,29 @@ import { Comment, Divider, Grid, Header, Icon, Segment } from "semantic-ui-react
 import Chat from "../components/Chats/Chat";
 import ChatListSearch from "../components/Chats/ChatListSearch";
 import { NoMessages } from "../components/NoData";
+import { loadMessages } from "../utilities/messageEvents";
 
 function Messages({ chatsData, user }) {
+
+    const router = useRouter();
+    const socket = useRef();
 
     const [chats, setChats] = useState(chatsData)
 
     // use this to check if user is online or not
     const [connectedUsers, setConnectedUsers] = useState([]);
 
-    const router = useRouter();
+    const [messages, setMessages] = useState([]);
 
-    const socket = useRef();
+    // state for name of user & profile pic  
+    // where it shows on the chat/message feature
+    const [bannerData, setBannerData] = useState({ name: "", profilePicUrl: "" })
 
-    
+    // ref is for updating state of url query string during re-renders.
+    // it is also the querystring inside the url 
+    const openChatId = useRef()
+
+
     useEffect(() => {
 
         // ref has current property
@@ -32,27 +42,46 @@ function Messages({ chatsData, user }) {
         if (socket.current) {
 
             socket.current.emit("join", { userId: user._id })
-             // listening to event, sending users
+            // listening to event, sending users
             socket.current.on("connectedUsers", ({ users }) => {
                 users.length > 0 && setConnectedUsers(users);
             })
         }
 
-          // if there's no query string inside URL, 
-          // only then we'll push user to first chat
+        // if there's no query string inside URL, 
+        // only then we'll push user to first chat
         if (chats.length > 0 && !router.query.message)
-          router.push(`/messages?message=${chats[0].messageWith}`, undefined, {
-            shallow: true
-          });
+            router.push(`/messages?message=${chats[0].messageWith}`, undefined, {
+                shallow: true
+            });
     }, []);
 
-    return () => {
+    useEffect(() => {
 
+        const loadMessages = () => {
+            socket.current.emit("loadMessages", {
+                userId: user._id,
+                messagesWith: router.query.message
+            });
+            
+            socket.current.on("messagesLoaded", ({ chat}) => {
+                setMessages(chat.messages);
+                setBannerData({ 
+                    name: chat.messagesWith.name, 
+                    profilePicUrl: chat.messagesWith.profilePicUrl 
+                });
+                
+                // ref will keep track of query string during re-renders
+                openChatId.current = chat.messageWith._id;
+            })
+        };
+        
         if (socket.current) {
-            socket.current.emit("disconnect")
-            socket.current.off()
+            loadMessages();
         }
-    }
+        
+    }, [router.query.message])
+
 
     return (
         <Segment basic padded size="large" style={{ marginTop: "5px" }}>
