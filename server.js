@@ -16,8 +16,8 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
-const { addUser, removeUser } = require("./utilities/socialEvents");
-const { loadMessages, sendMsg } = require("./utilities/messageEvents");
+const { addUser, removeUser, findConnectedUser } = require("./utilities/socialEvents");
+const { loadMessages, sendMsg, setMsgToUnread } = require("./utilities/messageEvents");
 
 
 io.on("connection", socket => {
@@ -50,11 +50,20 @@ io.on("connection", socket => {
   socket.on("sendNewMsg", async ({ userId, msgSendToUserId, msg }) => {
 
     const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg)
+  
+    const receiverSocket = findConnectedUser(msgSendToUserId);
 
-      if (!error) {
-        socket.emit("msgSent", { newMsg });
-      }
+    if (receiverSocket) {
 
+     // sending message to a particular socket
+      io.to(receiverSocket.socketId).emit("newMsgReceived", { newMsg });
+
+    } else {
+        // unread message set to true, will show message with alert in sidemenu
+        await setMsgToUnread(msgSendToUserId)
+    }
+
+      !error && socket.emit("msgSent", { newMsg });
   })
 
   // pass client/user's Id and remove it from the array
