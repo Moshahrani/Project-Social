@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const { addUser, removeUser } = require("./utilities/socialEvents");
-const { loadMessages } = require("./utilities/messageEvents");
+const { loadMessages, sendMsg } = require("./utilities/messageEvents");
 
 
 io.on("connection", socket => {
@@ -26,7 +26,6 @@ io.on("connection", socket => {
 
     const users = await addUser(userId, socket.id)
 
-    console.log(users)
 
     setInterval(() => {
       // sending back all the users every 10 seconds, 
@@ -43,8 +42,20 @@ io.on("connection", socket => {
 
     if (!error) {
       socket.emit("messagesLoaded", { chat });
+    } else {
+      socket.emit("noChatFound")
     }
   });
+
+  socket.on("sendNewMsg", async ({ userId, msgSendToUserId, msg }) => {
+
+    const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg)
+
+      if (!error) {
+        socket.emit("msgSent", { newMsg });
+      }
+
+  })
 
   // pass client/user's Id and remove it from the array
   socket.on("disconnect", () => removeUser(socket.id));
