@@ -8,14 +8,17 @@ import { Comment, Divider, Grid, Header, Icon, Segment } from "semantic-ui-react
 import Chat from "../components/Chats/Chat";
 import ChatListSearch from "../components/Chats/ChatListSearch";
 import { NoMessages } from "../components/NoData";
-import { loadMessages } from "../utilities/messageEvents";
+import Message from "../components/Chats/Message";
+import MessageField from "../components/Chats/MessageField";
+import Banner from "../components/Chats/Banner";
+import userInfo from "../utilities/userInfo";
 
 function Messages({ chatsData, user }) {
 
     const router = useRouter();
     const socket = useRef();
 
-    const [chats, setChats] = useState(chatsData)
+    const [chats, setChats] = useState(chatsData || [])
 
     // use this to check if user is online or not
     const [connectedUsers, setConnectedUsers] = useState([]);
@@ -28,9 +31,9 @@ function Messages({ chatsData, user }) {
 
     // ref is for updating state of url query string during re-renders.
     // it is also the querystring inside the url 
-    const openChatId = useRef()
+    const openChatId = useRef("")
 
-
+    // useEffect for connection
     useEffect(() => {
 
         // ref has current property
@@ -51,11 +54,12 @@ function Messages({ chatsData, user }) {
         // if there's no query string inside URL, 
         // only then we'll push user to first chat
         if (chats.length > 0 && !router.query.message)
-            router.push(`/messages?message=${chats[0].messageWith}`, undefined, {
+            router.push(`/messages?message=${chats[0].messagesWith}`, undefined, {
                 shallow: true
             });
     }, []);
 
+    // useEffect for loading the messages
     useEffect(() => {
 
         const loadMessages = () => {
@@ -63,24 +67,69 @@ function Messages({ chatsData, user }) {
                 userId: user._id,
                 messagesWith: router.query.message
             });
-            
-            socket.current.on("messagesLoaded", ({ chat}) => {
+
+            socket.current.on("messagesLoaded", ({ chat }) => {
                 setMessages(chat.messages);
-                setBannerData({ 
-                    name: chat.messagesWith.name, 
-                    profilePicUrl: chat.messagesWith.profilePicUrl 
+                setBannerData({
+                    name: chat.messagesWith.name,
+                    profilePicUrl: chat.messagesWith.profilePicUrl
                 });
-                
+
                 // ref will keep track of query string during re-renders
-                openChatId.current = chat.messageWith._id;
+                openChatId.current = chat.messagesWith._id;
+            })
+
+            socket.current.on("noChatFound", async () => {
+                console.log(router.query)
+                const { name, profilePicUrl } = await userInfo(router.query.message)
+
+                setBannerData({ name, profilePicUrl });
+                setMessages([]);
+
+                openChatId.current = router.query.message;
             })
         };
-        
-        if (socket.current) {
+
+        if (socket.current && router.query.message) {
             loadMessages();
         }
-        
     }, [router.query.message])
+
+    // send message method 
+    const sendMsg = msg => {
+        if (socket.current) {
+            socket.current.emit("sendNewMsg", {
+                userId: user._id,
+                msgSendToUserId: openChatId.current,
+                msg,
+            })
+        }
+    };
+
+    useEffect(() => {
+        if (socket.current) {
+            socket.current.on("msgSent", ({ newMsg }) => {
+                // making sure we send message to chat we have open
+                if (newMsg.receiver === openChatId.current) {
+                    setMessages(prev => [...prev, newMsg]);
+
+                    // send most recent message to ChatList 
+                    setChats(prev => {
+                        const previousChat = prev.find(
+                            chat => chat.messagesWith === newMsg.receiver
+                        );
+                        previousChat.lastMessage = newMsg.msg;
+                        previousChat.date = newMsg.date;
+
+                        return [...prev];
+                    });
+                }
+            });
+
+        }
+    }, []);
+
+
 
 
     return (
@@ -98,7 +147,6 @@ function Messages({ chatsData, user }) {
             </div>
 
             {chats.length > 0 ? <>
-
                 <>
                     <Grid stackable >
                         <Grid.Column width={4}>
@@ -114,6 +162,42 @@ function Messages({ chatsData, user }) {
                                     ))}
                                 </Segment>
                             </Comment.Group>
+                        </Grid.Column>
+
+                        <Grid.Column width={12}>
+                            {router.query.message && (
+                                <>
+                                    <div
+                                        style={{
+                                            overflow: "auto",
+                                            overflowX: "hidden",
+                                            maxHeight: "35rem",
+                                            height: "35rem",
+                                            backgroundColor: "whitesmoke"
+                                        }}
+                                    >
+                                        <div style={{ position: "sticky", top: "0" }}>
+                                            <Banner bannerData={bannerData} />
+                                        </div>
+                                        {messages.length > 0 && (
+                                            <>
+
+                                                {messages.map((message, i) => (
+                                                    <Message
+                                                        bannerProfilePic={bannerData.profilePicUrl}
+                                                        key={i}
+                                                        message={message}
+                                                        user={user}
+                                                        setMessage={setMessages}
+                                                        messagesWith={openChatId.current}
+                                                    />
+                                                ))}
+                                            </>
+                                        )}
+                                    </div>
+                                    <MessageField sendMsg={sendMsg} />
+                                </>
+                            )}
                         </Grid.Column>
                     </Grid></>
 
