@@ -1,5 +1,5 @@
 const ChatModel = require("../models/ChatModel");
-// const UserModel = require("../models/UserModel");
+const UserModel = require("../models/UserModel");
 
 const loadMessages = async (userId, messagesWith) => {
 
@@ -78,4 +78,23 @@ const sendMsg = async (userId, msgSendToUserId, msg) => {
     }
 }
 
-module.exports = { loadMessages, sendMsg };
+// will set message to unread 
+const setMsgToUnread = async userId => {
+
+    try {
+      const user = await UserModel.findById(userId);
+    
+      // if unread message false, set to true
+      if (!user.unreadMessage) {
+        user.unreadMessage = true;
+        await user.save();
+      }
+ 
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+ 
+
+module.exports = { loadMessages, sendMsg, setMsgToUnread };
