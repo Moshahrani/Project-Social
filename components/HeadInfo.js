@@ -7,7 +7,7 @@ const HeadInfo = () => (
             <meta charSet="UTF-8" />
 
             <link rel="stylesheet" type="text/css" href="/styles.css" />
-
+            <link rel="stylesheet" type="text/css" href="/messagesList.css" />
             <title> Project Social
             </title>
         </Head>
