@@ -7,7 +7,8 @@ function Message({
     messagesWith,
     setMessages,
     user,
-    bannerProfilePic
+    bannerProfilePic,
+    divRef
 }) {
     // state for showing delete icon for user's own messages 
     const [deleteIcon, showDeleteIcon] = useState(false)
@@ -15,7 +16,7 @@ function Message({
     // boolean to check if I am the sender of message
     const imSender = message.sender === user._id;
 
-    return (<div className="bubbleWrapper" >
+    return (<div className="bubbleWrapper" ref={divRef}>
 
         <div
             className={imSender ? "inlineContainer own" : "inlineContainer"}

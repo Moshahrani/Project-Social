@@ -14,6 +14,12 @@ import Banner from "../components/Chats/Banner";
 import userInfo from "../utilities/userInfo";
 import newMsgSound from "../utilities/newMessageAlert";
 
+// new message should scroll chat to bottom to see latest message
+const scrollDivDown = divRef => {             
+    // smooth behavior transition animation for scrolling to bottom
+    divRef.current !== null && divRef.current.scrollIntoView({ behavior: "smooth" })
+}
+
 function Messages({ chatsData, user }) {
 
     const router = useRouter();
@@ -33,6 +39,9 @@ function Messages({ chatsData, user }) {
     // ref is for updating state of url query string during re-renders.
     // it is also the querystring inside the url 
     const openChatId = useRef("")
+
+    const divRef = useRef();
+
 
     // useEffect for connection
     useEffect(() => {
@@ -78,6 +87,8 @@ function Messages({ chatsData, user }) {
 
                 // ref will keep track of query string during re-renders
                 openChatId.current = chat.messagesWith._id;
+                // scroll div to bottom 
+                divRef.current && scrollDivDown(divRef);
             })
 
             socket.current.on("noChatFound", async () => {
@@ -170,6 +181,11 @@ function Messages({ chatsData, user }) {
             })
         }
     }, []);
+    
+    // when messages state changes, execute scroll to bottom 
+    useEffect(() => {
+        messages.length > 0 && scrollDivDown(divRef);
+      }, [messages]);
 
 
 
@@ -226,6 +242,7 @@ function Messages({ chatsData, user }) {
 
                                                 {messages.map((message, i) => (
                                                     <Message
+                                                        divRef={divRef}
                                                         bannerProfilePic={bannerData.profilePicUrl}
                                                         key={i}
                                                         message={message}
