@@ -13,9 +13,10 @@ import MessageField from "../components/Chats/MessageField";
 import Banner from "../components/Chats/Banner";
 import userInfo from "../utilities/userInfo";
 import newMsgSound from "../utilities/newMessageAlert";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 // new message should scroll chat to bottom to see latest message
-const scrollDivDown = divRef => {             
+const scrollDivDown = divRef => {
     // smooth behavior transition animation for scrolling to bottom
     divRef.current !== null && divRef.current.scrollIntoView({ behavior: "smooth" })
 }
@@ -177,15 +178,32 @@ function Messages({ chatsData, user }) {
                     // add new chat to top of list, spread previous array
                     setChats(prev => [newChat, ...prev]);
                 }
-            newMsgSound(senderName);
+                newMsgSound(senderName);
             })
         }
     }, []);
-    
+
     // when messages state changes, execute scroll to bottom 
     useEffect(() => {
         messages.length > 0 && scrollDivDown(divRef);
-      }, [messages]);
+    }, [messages]);
+
+     // delete message by using socket  
+    const deleteMsg = (messageId) => {
+        if (socket.current) {
+            socket.current.emit("deleteMsg", {
+                userId: user._id,
+                messagesWith: openChatId.current, 
+                messageId
+            });
+            // set messages  , 
+            // filter previous messages 
+            socket.current.on("msgDeleted", () => {
+                setMessages(prev => prev.filter(message => message._id !== messageId))
+            });
+
+        }
+    }
 
 
 
@@ -247,8 +265,7 @@ function Messages({ chatsData, user }) {
                                                         key={i}
                                                         message={message}
                                                         user={user}
-                                                        setMessage={setMessages}
-                                                        messagesWith={openChatId.current}
+                                                        deleteMsg={deleteMsg}
                                                     />
                                                 ))}
                                             </>

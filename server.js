@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const { addUser, removeUser, findConnectedUser } = require("./utilities/socialEvents");
-const { loadMessages, sendMsg, setMsgToUnread } = require("./utilities/messageEvents");
+const { loadMessages, sendMsg, setMsgToUnread, deleteMsg } = require("./utilities/messageEvents");
 
 
 io.on("connection", socket => {
@@ -64,6 +64,16 @@ io.on("connection", socket => {
     }
 
       !error && socket.emit("msgSent", { newMsg });
+  })
+
+  socket.on("deleteMsg", async ({ userId, messagesWith, messageId }) => {
+
+    const { success } = await deleteMsg(userId, messagesWith, messageId)
+
+    if (success) {
+      socket.emit("msgDeleted");
+    }
+
   })
 
   // pass client/user's Id and remove it from the array

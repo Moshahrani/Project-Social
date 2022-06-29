@@ -4,9 +4,8 @@ import calculateTime from "../../utilities/calculateTime";
 
 function Message({
     message,
-    messagesWith,
-    setMessages,
     user,
+    deleteMsg,
     bannerProfilePic,
     divRef
 }) {
