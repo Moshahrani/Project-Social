@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 import { useRouter } from "next/router";
 import baseUrl from "../utilities/baseUrl";
 import { parseCookies } from "nookies";
@@ -12,6 +12,7 @@ import Message from "../components/Chats/Message";
 import MessageField from "../components/Chats/MessageField";
 import Banner from "../components/Chats/Banner";
 import userInfo from "../utilities/userInfo";
+import newMsgSound from "../utilities/newMessageAlert";
 
 function Messages({ chatsData, user }) {
 
@@ -80,12 +81,14 @@ function Messages({ chatsData, user }) {
             })
 
             socket.current.on("noChatFound", async () => {
-                console.log(router.query)
+
                 const { name, profilePicUrl } = await userInfo(router.query.message)
 
                 setBannerData({ name, profilePicUrl });
                 setMessages([]);
 
+                // set value to query.message because we don't receive 
+                // any chat from backend, value will be saved throughout re-renders
                 openChatId.current = router.query.message;
             })
         };
@@ -106,10 +109,12 @@ function Messages({ chatsData, user }) {
         }
     };
 
+    // useEffect for sending and receiving new messages 
     useEffect(() => {
         if (socket.current) {
             socket.current.on("msgSent", ({ newMsg }) => {
-                // making sure we send message to chat we have open
+
+                // making sure we send message update to chat 
                 if (newMsg.receiver === openChatId.current) {
                     setMessages(prev => [...prev, newMsg]);
 
@@ -126,6 +131,43 @@ function Messages({ chatsData, user }) {
                 }
             });
 
+            socket.current.on("newMsgReceived", async ({ newMsg }) => {
+
+                let senderName = "";
+
+                // sending message to user while chat is currently opened for view
+                if (newMsg.sender === openChatId.current) {
+
+                    setMessages(prev => [...prev, newMsg])
+
+                    setChats(prev => {
+                        const prevChat = prev.find(chat => chat.messagesWith === newMsg.sender)
+                        prevChat.lastMessage = newMsg.msg;
+                        prevChat.date = newMsg.date;
+                        senderName = prevChat.name;
+
+                        return [...prev]
+                    })
+                }
+                // if no previous chat with user
+                else {
+
+                    const { name, profilePicUrl } = await getUserInfo(newMsg.sender);
+
+                    senderName = name;
+
+                    const newChat = {
+                        messagesWith: newMsg.sender,
+                        name,
+                        profilePicUrl,
+                        lastMessage: newMsg.msg,
+                        date: newMsg.date
+                    };
+                    // add new chat to top of list, spread previous array
+                    setChats(prev => [newChat, ...prev]);
+                }
+            newMsgSound(senderName);
+            })
         }
     }, []);
 
