@@ -13,7 +13,7 @@ import MessageField from "../components/Chats/MessageField";
 import Banner from "../components/Chats/Banner";
 import userInfo from "../utilities/userInfo";
 import newMsgSound from "../utilities/newMessageAlert";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+import cookie from "js-cookie";
 
 // new message should scroll chat to bottom to see latest message
 const scrollDivDown = divRef => {
@@ -188,12 +188,13 @@ function Messages({ chatsData, user }) {
         messages.length > 0 && scrollDivDown(divRef);
     }, [messages]);
 
-     // delete message by using socket  
+    // delete message by using socket  
     const deleteMsg = (messageId) => {
+
         if (socket.current) {
             socket.current.emit("deleteMsg", {
                 userId: user._id,
-                messagesWith: openChatId.current, 
+                messagesWith: openChatId.current,
                 messageId
             });
             // set messages  , 
@@ -205,17 +206,36 @@ function Messages({ chatsData, user }) {
         }
     }
 
+    // delete whole chat with other user
+    const deleteChat = async messagesWith => {
 
+        try {
+            // using axios instead of socket
+            await axios.delete(`${baseUrl}/api/chats/${messagesWith}`, {
+                headers: { Authorization: cookie.get("token") }
+            });
+            // filter chats array and remove chat after deleting from backend
+
+            setChats(prev => prev.filter(chat => chat.messagesWith !== messagesWith));
+
+            // push user to messages route
+            router.push("/messages", undefined, { shallow: true });
+
+            // set openChat to empty strings in case user wants to create 
+            // a new chat with same end user
+            openChatId.current = "";
+
+        } catch (error) {
+            alert("Error deleting chat");
+        }
+    };
 
 
     return (
         <Segment basic padded size="large" style={{ marginTop: "5px" }}>
-            <Header
-                icon="home"
-                content="Go Back!"
-                onClick={() => router.push("/")}
-                style={{ cursor: "pointer" }}
-            />
+            <a href="/">
+                <Header icon="home" content="Go Back!" style={{ cursor: "pointer" }} />
+            </a>
             <Divider hidden />
 
             <div style={{ marginBottom: "10px" }}>
@@ -233,7 +253,7 @@ function Messages({ chatsData, user }) {
                                             connectedUsers={connectedUsers}
                                             key={i}
                                             chat={chat}
-                                            setChats={setChats}
+                                            deleteChat={deleteChat}
                                         />
                                     ))}
                                 </Segment>

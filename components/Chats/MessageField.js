@@ -11,8 +11,7 @@ function MessageField({ sendMsg }) {
 
         <div style={{ position: "sticky", bottom: "0" }}>
             <Segment secondary color="teal" attached="bottom">
-                <Form
-                    reply
+                <Form reply
                     onSubmit={e => {
                         e.preventDefault();
                         sendMsg(text);

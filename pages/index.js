@@ -60,6 +60,7 @@ function Index({ user, postsData, errorLoading }) {
 
     document.title = `Welcome, ${user.name.split(" ")[0]}`;
 
+
   }, []);
 
   // when showToast changes to true
@@ -105,7 +106,7 @@ function Index({ user, postsData, errorLoading }) {
           showNewMessageModal={showNewMessageModal}
           newMessageModal={newMessageModal}
           newMessageReceived={newMessageReceived}
-          username={user.username}
+          user={user}
         />
       )}
       <Segment>
