@@ -40,20 +40,41 @@ router.get("/", authMiddleware, async (req, res) => {
 // get user info
 router.get("/user/:userToFindId", authMiddleware, async (req, res) => {
 
-  try {
+    try {
 
-    const user = await UserModel.findById(req.params.userToFindId)
+        const user = await UserModel.findById(req.params.userToFindId)
 
-    if (!user) {
-        return res.status(404).send("No User Found");
+        if (!user) {
+            return res.status(404).send("No User Found");
+        }
+
+        return res.json({ name: user.name, profilePicUrl: user.profilePicUrl })
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Server error");
     }
-
-    return res.json({ name: user.name, profilePicUrl: user.profilePicUrl })
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send("Server error");
-  }
 });
 
+// delete chat
+router.delete("/:messagesWith", authMiddleware, async (req, res) => {
+
+    try {
+
+        const { userId } = req;
+        const { messagesWith } = req.params;
+
+        await ChatModel.findOneAndUpdate(
+            { user: userId },
+            { $pull: { chats: { messagesWith } } }
+        );
+
+        return res.status(200).send("Chat deleted");
+
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send("Server error")
+    }
+
+});
 
 module.exports = router;
