@@ -26,18 +26,17 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
             </Link>
             <br />
 
-            <Link href="/messages">
-                <List.Item active={isActive("/messages")}>
-                    <Icon name={unreadMessage ? "hand point right" : "mail outline"}
-                        size="large"
-                        color={(isActive("/messages") && "teal") || (unreadMessage && "orange")
-                        }
-                    />
-                    <List.Content>
-                        <List.Header content="Messages" />
-                    </List.Content>
-                </List.Item>
-            </Link>
+            <List.Item active={isActive("/messages")} as="a" href="/messages">
+                <Icon
+                    name={unreadMessage ? "hand point right" : "mail outline"}
+                    size="large"
+                    color={(isActive("/messages") && "teal") || (unreadMessage && "orange")}
+                />
+                <List.Content>
+                    <List.Header content="Messages" />
+                </List.Content>
+            </List.Item>
+
             <br />
 
             <Link href="/notifications">
