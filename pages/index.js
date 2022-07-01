@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios"
+import io from "socket.io-client";
 import baseUrl from "../utilities/baseUrl";
 import CreatePost from "../components/Post/CreatePost";
 import PostLayout from "../components/Post/PostLayout";
@@ -7,9 +8,11 @@ import { Placeholder, Segment } from "semantic-ui-react";
 import { parseCookies } from "nookies";
 import { NoPosts } from "../components/NoData";
 import { PostDeleteToast } from "../components/Toast";
-import { Axios } from "../utilities/postEvents";
+import userInfo from "../utilities/userInfo";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PlaceHolderPosts, EndMessage } from "../components/PlaceHolderGroup";
+import MessageNotificationModal from "../components/MessageNotificationModal";
+import newMsgSound from "../utilities/newMessageAlert";
 import cookie from "js-cookie";
 
 function Index({ user, postsData, errorLoading }) {
@@ -18,10 +21,45 @@ function Index({ user, postsData, errorLoading }) {
   const [showToast, setShowToast] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  const [newMessageReceived, setNewMessageReceived] = useState(null);
+  const [newMessageModal, showNewMessageModal] = useState(false);
+
   const [pageNumber, setPageNumber] = useState(2);
 
+  const socket = useRef();
+
+
   useEffect(() => {
+
+    if (!socket.current) {
+      socket.current = io(baseUrl);
+    }
+
+    if (socket.current) {
+      socket.current.emit("join", { userId : user._id });
+
+      socket.current.on("newMsgReceived", async ({ newMsg }) => {
+
+        // will give us the name and profilePicUrl 
+        // which we'll need in the modal
+        const { name, profilePicUrl } = await userInfo(newMsg.sender)
+
+        if (user.newMessagePopup) {
+
+          setNewMessageReceived({
+            ...newMsg,
+            senderName: name,
+            senderProfilePic: profilePicUrl
+          });
+          showNewMessageModal(true);
+        }
+
+        newMsgSound(name);
+      });
+    }
+
     document.title = `Welcome, ${user.name.split(" ")[0]}`;
+
   }, []);
 
   // when showToast changes to true
@@ -34,13 +72,13 @@ function Index({ user, postsData, errorLoading }) {
   const fetchDataOnScroll = async () => {
 
     try {
-       
+
       // send page number in get request using "params"
       const result = await axios.get(`${baseUrl}/api/posts`, {
-        headers: { Authorization: cookie.get("token") }, 
+        headers: { Authorization: cookie.get("token") },
         params: { pageNumber }
       });
-      
+
       // if no more posts on the backend
       // setHasMore will tell infinite scroll component 
       // theres no more data to fetch, won't call function
@@ -60,6 +98,16 @@ function Index({ user, postsData, errorLoading }) {
   return (
     <>
       {showToast && <PostDeleteToast />}
+       {/* conditional for new message modal */}
+      {newMessageModal && newMessageReceived !== null && (
+        <MessageNotificationModal
+          socket={socket}
+          showNewMessageModal={showNewMessageModal}
+          newMessageModal={newMessageModal}
+          newMessageReceived={newMessageReceived}
+          username={user.username}
+        />
+      )}
       <Segment>
         <CreatePost user={user} setPosts={setPosts} />
 
