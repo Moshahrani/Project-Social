@@ -98,6 +98,7 @@ io.on("connection", socket => {
 
   // pass client/user's Id and remove it from the array
   socket.on("disconnect", () => removeUser(socket.id));
+  console.log("User disconnected")
 });
 
 nextApp.prepare().then(() => {
