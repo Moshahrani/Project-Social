@@ -50,21 +50,21 @@ io.on("connection", socket => {
   socket.on("sendNewMsg", async ({ userId, msgSendToUserId, msg }) => {
 
     const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg)
-  
+
     const receiverSocket = findConnectedUser(msgSendToUserId);
 
     if (receiverSocket) {
 
-     // sending message to a particular socket
+      // sending message to a particular socket
       io.to(receiverSocket.socketId).emit("newMsgReceived", { newMsg });
 
     } else {
-        // unread message set to true, will show message with alert in sidemenu
-        await setMsgToUnread(msgSendToUserId)
+      // unread message set to true, will show message with alert in sidemenu
+      await setMsgToUnread(msgSendToUserId)
     }
 
-      !error && socket.emit("msgSent", { newMsg });
-  })
+    !error && socket.emit("msgSent", { newMsg });
+  });
 
   socket.on("deleteMsg", async ({ userId, messagesWith, messageId }) => {
 
@@ -74,7 +74,27 @@ io.on("connection", socket => {
       socket.emit("msgDeleted");
     }
 
-  })
+  });
+
+  socket.on("sendMsgFromNotification", async ({ userId, msgSendToUserId, msg }) => {
+
+    const { newMsg, error } = await sendMsg(userId, msgSendToUserId, msg)
+
+    const receiverSocket = findConnectedUser(msgSendToUserId);
+
+    if (receiverSocket) {
+
+      // sending message to a particular socket
+      io.to(receiverSocket.socketId).emit("newMsgReceived", { newMsg });
+
+    } else {
+      // unread message set to true, will show message with alert in sidemenu
+      await setMsgToUnread(msgSendToUserId)
+    }
+
+    !error && socket.emit("msgSentFromNotification")
+
+  });
 
   // pass client/user's Id and remove it from the array
   socket.on("disconnect", () => removeUser(socket.id));
