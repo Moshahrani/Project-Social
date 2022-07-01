@@ -20,8 +20,8 @@ function Message({
         <div
             className={imSender ? "inlineContainer own" : "inlineContainer"}
             onClick={() => imSender && showDeleteIcon(!deleteIcon)}
-        > 
-          {/* conditional render of profile pic if user or end receiver */}
+        >
+            {/* conditional render of profile pic if user or end receiver */}
             <img
                 className="inlineIcon"
                 src={imSender ? user.profilePicUrl : bannerProfilePic}
@@ -30,7 +30,7 @@ function Message({
             <div className={imSender ? "ownBubble own" : "otherBubble other"}>
                 {message.msg}
             </div>
-             {/* delete functionality for each message of user's own messages */}
+            {/* delete functionality for each message of user's own messages */}
             {deleteIcon && (
                 <Popup
                     trigger={
@@ -46,7 +46,7 @@ function Message({
                 />
             )}
         </div>
-          {/* check for time of message and time stamp each user's message */}
+        {/* check for time of message and time stamp each user's message */}
         <span className={imSender ? "own" : "other"}>{calculateTime(message.date)}</span>
     </div>
     );
