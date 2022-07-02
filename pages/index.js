@@ -126,6 +126,7 @@ function Index({ user, postsData, errorLoading }) {
             {
               posts.map(post => (
                 <PostLayout
+                socket={socket}
                   key={post._id}
                   post={post}
                   user={user}

@@ -19,7 +19,7 @@ import LikesList from "./LikesList";
 import ImageModal from "./ImageModal";
 import NoImageModal from "./NoImageModal";
 
-function PostLayout({ post, user, setPosts, setShowToast }) {
+function PostLayout({ post, user, setPosts, setShowToast, socket }) {
 
     const [likes, setLikes] = useState(post.likes);
 
@@ -31,8 +31,8 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
     const [comments, setComments] = useState(post.comments);
     const [error, setError] = useState(null);
 
-    const  [showModal, setShowModal] = useState(false);
-    
+    const [showModal, setShowModal] = useState(false);
+
     // function to add props to both Image and No Image Modal components
     const addPropsToModal = () => ({
         post,
@@ -46,18 +46,18 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
 
     return (
         <>
-         {/* // showModal with conditional rendering for Image || NoImage Modals */}
-        {showModal && (
-            <Modal 
-            open={showModal} 
-            closeIcon 
-            closeOnDimmerClick 
-            onClose={() => setShowModal(false)}>
-                <Modal.Content>
-                    {post.picUrl ? <ImageModal {...addPropsToModal()} /> : <NoImageModal {...addPropsToModal()} />}
-                </Modal.Content>
-            </Modal>
-        )}
+            {/* // showModal with conditional rendering for Image || NoImage Modals */}
+            {showModal && (
+                <Modal
+                    open={showModal}
+                    closeIcon
+                    closeOnDimmerClick
+                    onClose={() => setShowModal(false)}>
+                    <Modal.Content>
+                        {post.picUrl ? <ImageModal {...addPropsToModal()} /> : <NoImageModal {...addPropsToModal()} />}
+                    </Modal.Content>
+                </Modal>
+            )}
             <Segment basic>
                 <Card color="teal" fluid>
                     {post.picUrl && (
@@ -129,7 +129,30 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                             style={{ cursor: "pointer" }}
                             // passing onClick method with 4th paramater being a 
                             // conditional if user has already liked the post or not
-                            onClick={() => likePost(post._id, user._id, setLikes, liked ? false : true)}
+                            // if socket or without 
+                            onClick={() => {
+
+                                if (socket.current) {
+                                    socket.current.emit("likePost", {
+                                        postId: post._id,
+                                        userId: user._id,
+                                        like: liked ? false : true
+                                    });
+                                    socket.current.on("postLiked", () => {
+                                        // if liked before
+                                        if(liked) {
+                                            setLikes(prev => prev.filter(like => like.user !== user._id))
+                                        } 
+                                        else { 
+                                            // adding the like to the likes array
+                                            setLikes(prev => [...prev, { user: user._id }]);
+                                        }
+                                    })
+                                } else {
+                                    
+                                    likePost(post._id, user._id, setLikes, liked ? false : true)
+                                }
+                            }}
                         />
                         <LikesList
                             postId={post._id}
@@ -167,7 +190,7 @@ function PostLayout({ post, user, setPosts, setShowToast }) {
                                 color="teal"
                                 basic circular
                                 onClick={() => setShowModal(true)}
-                                />}
+                            />}
 
                         <Divider hidden />
 

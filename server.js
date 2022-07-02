@@ -17,8 +17,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const { addUser, removeUser, findConnectedUser } = require("./utilities/socialEvents");
-const { loadMessages, sendMsg, setMsgToUnread, deleteMsg } = require("./utilities/messageEvents");
+const { loadMessages,
+  sendMsg,
+  setMsgToUnread,
+  deleteMsg
+} = require("./utilities/messageEvents");
 
+const { likeUnlike } = require("./utilities/likeUnlike");
 
 io.on("connection", socket => {
 
@@ -35,6 +40,14 @@ io.on("connection", socket => {
       })
     }, 10000)
   });
+
+  socket.on("likePost", async ({ postId, userId, like }) => {
+    const { success, error } = await likeUnlike(postId, userId, like);
+
+    if (success) {
+      socket.emit("postLiked")
+    }
+  })
 
   socket.on("loadMessages", async ({ userId, messagesWith }) => {
 
