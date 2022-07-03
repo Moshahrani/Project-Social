@@ -4,6 +4,7 @@ import baseUrl from "../utilities/baseUrl";
 import { parseCookies, destroyCookie } from "nookies";
 import { redirectUser } from "../utilities/authUser";
 import "semantic-ui-css/semantic.min.css";
+import "cropperjs/dist/cropper.css";
 
 function MyApp({ Component, pageProps }) {
     return (
