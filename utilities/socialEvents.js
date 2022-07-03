@@ -9,7 +9,8 @@ const users = [];
      return users;
    }
    
-    // remove user if not equal to socketId
+    // remove user if not equal to socketId,
+    // making sure no duplicate users
    else {
      if (user && user.socketId !== socketId) {
        await removeUser(user.socketId);

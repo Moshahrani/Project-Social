@@ -12,6 +12,7 @@ import userInfo from "../utilities/userInfo";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PlaceHolderPosts, EndMessage } from "../components/PlaceHolderGroup";
 import MessageNotificationModal from "../components/MessageNotificationModal";
+import NotifyProp from "../components/NotifyProp";
 import newMsgSound from "../utilities/newMessageAlert";
 import cookie from "js-cookie";
 
@@ -23,6 +24,9 @@ function Index({ user, postsData, errorLoading }) {
 
   const [newMessageReceived, setNewMessageReceived] = useState(null);
   const [newMessageModal, showNewMessageModal] = useState(false);
+
+  const [newNotification, setNewNotification] = useState(null);
+  const [notificationPopup, showNotificationPopup] = useState(false);
 
   const [pageNumber, setPageNumber] = useState(2);
 
@@ -36,7 +40,7 @@ function Index({ user, postsData, errorLoading }) {
     }
 
     if (socket.current) {
-      socket.current.emit("join", { userId : user._id });
+      socket.current.emit("join", { userId: user._id });
 
       socket.current.on("newMsgReceived", async ({ newMsg }) => {
 
@@ -96,10 +100,30 @@ function Index({ user, postsData, errorLoading }) {
     }
   };
 
+  useEffect(() => {
+
+    if (socket.current) {
+      socket.current.on("newNotificationReceived", ({ name, username, profilePicUrl, postId }) => {
+
+        // all info from backend to use for setting state
+        setNewNotification({ name, username, profilePicUrl, postId })
+
+        showNotificationPopup(true)
+      })
+    }
+  }, [])
+
   return (
     <>
+      {notificationPopup && newNotification !== null && (
+        <NotifyProp
+          newNotification={newNotification}
+          notificationPopup={notificationPopup}
+          showNotificationPopup={showNotificationPopup}
+        />)}
+        
       {showToast && <PostDeleteToast />}
-       {/* conditional for new message modal */}
+      {/* conditional for new message modal */}
       {newMessageModal && newMessageReceived !== null && (
         <MessageNotificationModal
           socket={socket}
@@ -126,7 +150,7 @@ function Index({ user, postsData, errorLoading }) {
             {
               posts.map(post => (
                 <PostLayout
-                socket={socket}
+                  socket={socket}
                   key={post._id}
                   post={post}
                   user={user}

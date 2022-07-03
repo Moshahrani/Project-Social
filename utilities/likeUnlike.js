@@ -1,6 +1,5 @@
 const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
-
 const {
     newLikeNotification,
     removeLikeNotification
@@ -34,6 +33,7 @@ const likeUnlike = async (postId, userId, like) => {
             }
         }
         else {
+
             const liked =
                 post.likes.filter(like => like.user.toString() === userId).length === 0;
 
@@ -46,17 +46,28 @@ const likeUnlike = async (postId, userId, like) => {
             await post.likes.splice(index, 1)
             await post.save();
 
-             // checking if liking own post
-             if (post.user.toString() !== userId) {
+            // checking if liking own post
+            if (post.user.toString() !== userId) {
                 await removeLikeNotification(userId, postId, post.user.toString());
             }
         }
-        // everything was done successfully whether liked or unliked
-        return { success: true }
 
+        const user = await UserModel.findById(userId);
+
+        const { name, profilePicUrl, username } = user;
+
+        // return properties with success check
+        return {
+            success: true,
+            name,
+            username,
+            profilePicUrl,
+            postByUserId: post.user.toString()
+        };
     } catch (error) {
         return { error: "Server error" };
     }
-}
+};
+
 
 module.exports = { likeUnlike };

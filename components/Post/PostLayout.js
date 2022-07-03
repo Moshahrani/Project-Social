@@ -149,7 +149,6 @@ function PostLayout({ post, user, setPosts, setShowToast, socket }) {
                                         }
                                     })
                                 } else {
-                                    
                                     likePost(post._id, user._id, setLikes, liked ? false : true)
                                 }
                             }}

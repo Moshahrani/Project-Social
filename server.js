@@ -22,7 +22,6 @@ const { loadMessages,
   setMsgToUnread,
   deleteMsg
 } = require("./utilities/messageEvents");
-
 const { likeUnlike } = require("./utilities/likeUnlike");
 
 io.on("connection", socket => {
@@ -30,7 +29,6 @@ io.on("connection", socket => {
   socket.on("join", async ({ userId }) => {
 
     const users = await addUser(userId, socket.id)
-
 
     setInterval(() => {
       // sending back all the users every 10 seconds, 
@@ -42,12 +40,32 @@ io.on("connection", socket => {
   });
 
   socket.on("likePost", async ({ postId, userId, like }) => {
-    const { success, error } = await likeUnlike(postId, userId, like);
+    const { success,
+      name,
+      username,
+      profilePicUrl,
+      postByUserId,
+      error } = await likeUnlike(postId, userId, like);
 
     if (success) {
-      socket.emit("postLiked")
+      socket.emit("postLiked");
+      // if not liking own post, send notification
+      if (postByUserId !== userId) {
+
+        const receiverSocket = findConnectedUser(postByUserId);
+
+        if (receiverSocket && like) {
+          // when wanting to send to a particular user
+          io.to(receiverSocket.socketId).emit("newNotificationReceived", {
+            name,
+            profilePicUrl,
+            username,
+            postId
+          });
+        }
+      }
     }
-  })
+  });
 
   socket.on("loadMessages", async ({ userId, messagesWith }) => {
 
