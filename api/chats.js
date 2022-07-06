@@ -77,4 +77,20 @@ router.delete("/:messagesWith", authMiddleware, async (req, res) => {
 
 });
 
+
+router.post("/", authMiddleware, async (req, res) => {
+    try {
+      const user = await UserModel.findById(req.userId);
+      if (!user.unreadMessage) {
+        user.unreadMessage = true;
+        await user.save();
+      }
+  
+      res.sendStatus(200);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send(`Server error`);
+    }
+  });
+
 module.exports = router;

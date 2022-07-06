@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { useRouter } from "next/router";
 import baseUrl from "../utilities/baseUrl";
 import { parseCookies } from "nookies";
-import { Comment, Divider, Grid, Header, Icon, Segment } from "semantic-ui-react";
+import { Comment, Divider, Grid, Header, Segment } from "semantic-ui-react";
 import Chat from "../components/Chats/Chat";
 import ChatListSearch from "../components/Chats/ChatListSearch";
 import { NoMessages } from "../components/NoData";
@@ -14,6 +14,17 @@ import Banner from "../components/Chats/Banner";
 import userInfo from "../utilities/userInfo";
 import newMsgSound from "../utilities/newMessageAlert";
 import cookie from "js-cookie";
+
+
+const setMessageToUnread = async () => {
+    await axios.post(
+      `${baseUrl}/api/chats`,
+      {},
+      { headers: { Authorization: cookie.get("token") } }
+    );
+  };
+  
+
 
 // new message should scroll chat to bottom to see latest message
 const scrollDivDown = divRef => {
@@ -43,9 +54,9 @@ function Messages({ chatsData, user }) {
 
     const divRef = useRef();
 
-
     // useEffect for connection
     useEffect(() => {
+        if (user.unreadMessage) setMessageToUnread();
 
         // ref has current property
         // connecting with server by calling "io"
@@ -308,7 +319,7 @@ function Messages({ chatsData, user }) {
 export const getServerSideProps = async ctx => {
 
     try {
-        
+
         const { token } = parseCookies(ctx);
 
         const res = await axios.get(`${baseUrl}/api/chats`, {

@@ -96,7 +96,6 @@ const setMsgToUnread = async userId => {
     }
 };
 
-
 // delete message from chat 
 const deleteMsg = async (userId, messagesWith, messageId) => {
 
