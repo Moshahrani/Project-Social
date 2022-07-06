@@ -16,15 +16,13 @@ import newMsgSound from "../utilities/newMessageAlert";
 import cookie from "js-cookie";
 
 
-const setMessageToUnread = async () => {
+const setMsgToRead = async () => {
     await axios.post(
-      `${baseUrl}/api/chats`,
-      {},
-      { headers: { Authorization: cookie.get("token") } }
+        `${baseUrl}/api/chats`,
+        {},
+        { headers: { Authorization: cookie.get("token") } }
     );
-  };
-  
-
+};
 
 // new message should scroll chat to bottom to see latest message
 const scrollDivDown = divRef => {
@@ -56,7 +54,7 @@ function Messages({ chatsData, user }) {
 
     // useEffect for connection
     useEffect(() => {
-        if (user.unreadMessage) setMessageToUnread();
+        if (user.unreadMessage) setMsgToRead();
 
         // ref has current property
         // connecting with server by calling "io"
