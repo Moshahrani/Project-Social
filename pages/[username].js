@@ -155,27 +155,29 @@ function Profile({
         </Grid>
     </>
 }
+// getServerSideProps will execute the transition on
+// initial page load and future transitions 
+// running it again on the server rather than client
 
-Profile.getInitialProps = async (ctx) => {
+export const getServerSideProps = async ctx => {
 
     try {
 
         const { username } = ctx.query;
-        // helps server-side with cookies
         const { token } = parseCookies(ctx);
 
-        const result = await axios.get(`${baseUrl}/api/profile/${username}`,
-            { headers: { Authorization: token } })
+        const res = await axios.get(`${baseUrl}/api/profile/${username}`, {
+            headers: { Authorization: token }
+        });
 
-        const { profile, followersLength, followingLength } = result.data
+        const { profile, followersLength, followingLength } = res.data;
 
-        return { profile, followersLength, followingLength }
-
+        return { props: { profile, followersLength, followingLength } };
 
     } catch (error) {
-        return { errorLoading: true }
+        return { props: { errorLoading: true } };
     }
-}
+};
 
 export default Profile;
 

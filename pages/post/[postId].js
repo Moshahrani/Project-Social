@@ -123,21 +123,23 @@ function Post({ post, errorLoading, user }) {
     );
 };
 
-Post.getInitialProps = async (ctx) => {
+export const getServerSideProps = async ctx => {
 
     try {
 
         const { postId } = ctx.query;
         const { token } = parseCookies(ctx);
 
-        const result = await axios.get(`${baseUrl}/api/posts/${postId}`, {
+        const res = await axios.get(`${baseUrl}/api/posts/${postId}`, {
             headers: { Authorization: token }
         });
 
-        return { post: result.data };
+        return { props: { post: res.data } };
+
     } catch (error) {
-        return { errorLoading: true };
+        return { props: { errorLoading: true } };
     }
 };
+
 
 export default Post;

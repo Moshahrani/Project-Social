@@ -305,21 +305,22 @@ function Messages({ chatsData, user }) {
     )
 }
 
-Messages.getInitialProps = async (ctx) => {
+export const getServerSideProps = async ctx => {
 
     try {
+        
+        const { token } = parseCookies(ctx);
 
-        const { token } = parseCookies(ctx)
-
-        const result = await axios.get(`${baseUrl}/api/chats`, {
+        const res = await axios.get(`${baseUrl}/api/chats`, {
             headers: { Authorization: token }
-        })
+        });
 
-        return { chatsData: result.data }
+        return { props: { chatsData: res.data } };
 
     } catch (error) {
-        return { errorLoading: true }
+        return { props: { errorLoading: true } };
     }
-}
+};
+
 
 export default Messages;

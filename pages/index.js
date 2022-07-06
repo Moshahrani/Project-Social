@@ -121,7 +121,7 @@ function Index({ user, postsData, errorLoading }) {
           notificationPopup={notificationPopup}
           showNotificationPopup={showNotificationPopup}
         />)}
-        
+
       {showToast && <PostDeleteToast />}
       {/* conditional for new message modal */}
       {newMessageModal && newMessageReceived !== null && (
@@ -166,22 +166,21 @@ function Index({ user, postsData, errorLoading }) {
   )
 };
 
-
-Index.getInitialProps = async (ctx) => {
+export const getServerSideProps = async ctx => {
 
   try {
-
-    const { token } = parseCookies(ctx)
+    const { token } = parseCookies(ctx);
 
     const res = await axios.get(`${baseUrl}/api/posts`, {
       headers: { Authorization: token },
       params: { pageNumber: 1 }
     });
-    return { postsData: res.data };
 
+    return { props: { postsData: res.data } };
+    
   } catch (error) {
-    return { errorLoading: true }
+    return { props: { errorLoading: true } };
   }
-}
+};
 
 export default Index;

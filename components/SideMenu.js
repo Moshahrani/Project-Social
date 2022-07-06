@@ -36,6 +36,7 @@ function SideMenu({ user: { username, email, unreadNotification, unreadMessage }
                 <List.Content>{comp && <List.Header content="Messages" />}</List.Content>
             </List.Item>
             </Link>
+            
             <br />
 
             <Link href="/notifications">
