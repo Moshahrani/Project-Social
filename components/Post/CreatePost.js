@@ -59,7 +59,7 @@ function CreatePost({ user, setPosts }) {
 
         // revokeObjectURL will free up the memory used up by createObjectURL
         URL.revokeObjectURL(mediaPreview)
-        
+
         setMediaPreview(null);
         setLoading(false);
     };
@@ -73,7 +73,6 @@ function CreatePost({ user, setPosts }) {
         paddingTop: media === null && "60px",
         borderColor: highlight ? "green" : "black"
     });
-
 
     return <>
 
@@ -108,7 +107,6 @@ function CreatePost({ user, setPosts }) {
                     width={14}
                 />
             </Form.Group>
-
 
             {/* Form for submitting location based information */}
             <Form.Group>
