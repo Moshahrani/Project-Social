@@ -67,5 +67,4 @@ function ResponsiveLayout({ user: { unreadNotification, email, unreadMessage, us
     );
 }
 
-
 export default ResponsiveLayout;

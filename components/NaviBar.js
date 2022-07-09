@@ -12,8 +12,6 @@ function NaviBar() {
     return (
         <Menu fluid borderless>
             <Container text>
-
-
                 <Link href="/login">
                     <Menu.Item header active={isActive('/login')}>
                         <Icon size="big" name="sign in" />

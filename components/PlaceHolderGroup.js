@@ -18,7 +18,6 @@ const genArray = length => {
     return newArr;
 };
 
-
 export const LikesPlaceHolder = () =>
     genArray(6).map(item => (
         <Placeholder key={item} style={{ minWidth: "200px" }}>
@@ -48,7 +47,7 @@ export const PlaceHolderPosts = () =>
         </div>
     ));
 
-    // no more posts to fetch from the backend
+// no more posts to fetch from the backend
 export const EndMessage = () => (
     <Container textAlign="center">
         <Icon name="refresh" size="large" />

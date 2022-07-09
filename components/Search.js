@@ -19,13 +19,13 @@ function SearchComp() {
   const handleChange = async e => {
     const { value } = e.target;
     setText(value);
-    if (value.length === 0) return ;
+    if (value.length === 0) return;
 
     // removes white spaces during search
     if (value.trim().length === 0) return;
-  
-     setText(value);
-     setLoading(true);
+
+    setText(value);
+    setLoading(true);
 
     try {
       cancel && cancel()
@@ -47,7 +47,7 @@ function SearchComp() {
         results.length > 0 && setResults([]);
         return setLoading(false);
       }
-       setResults(res.data);
+      setResults(res.data);
 
     } catch (error) {
       console.log(error);
@@ -55,7 +55,6 @@ function SearchComp() {
 
     setLoading(false);
   };
-
 
   // fixed bug when text length was equal to 0 and loading was 
   // not being changed to false automatically

@@ -16,7 +16,6 @@ function MessageNotificationModal({
 
     const onModalClose = () => showNewMessageModal(false);
 
-    
     const formSubmit = e => {
         e.preventDefault();
 
@@ -62,7 +61,7 @@ function MessageNotificationModal({
                         <Segment secondary color="teal" attached="bottom">
                             <Form reply
                                 onSubmit={formSubmit}
-                                 >
+                            >
                                 <Form.Input
                                     action={{
                                         color: "blue",
