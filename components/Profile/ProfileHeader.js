@@ -106,7 +106,7 @@ function ProfileHeader({
                             <Image size="large" avatar src={profile.user.profilePicUrl} />
                         </Grid.Row>
                         <br />
-                        
+
                         {/* // will show follow info based on followstats and while not on own profile */}
 
                         {!ownAccount && (

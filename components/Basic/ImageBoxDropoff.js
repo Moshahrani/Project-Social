@@ -17,7 +17,6 @@ function ImageBoxDropoff({ highlight,
     // use this to check if signup route 
     const signupRoute = router.pathname === "/signup";
 
-
     return (
         <>
             <Form.Field>
@@ -47,7 +46,7 @@ function ImageBoxDropoff({ highlight,
                             setHighlight(true);
                             console.log(e.dataTransfer.files);
                         }}>
-                            {/* // if signup route, return this header,
+                        {/* // if signup route, return this header,
                         // else return this jsx second option which renders user's profile image
                             in update profile tab image box container */}
                         {mediaPreview === null ? (

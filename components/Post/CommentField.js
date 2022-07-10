@@ -5,7 +5,7 @@ import { postComment } from "../../utilities/postEvents";
 function CommentField({ postId, user, setComments }) {
 
     const [text, setText] = useState("");
-    
+
     const [loading, setLoading] = useState(false);
 
     return (
@@ -14,7 +14,7 @@ function CommentField({ postId, user, setComments }) {
             onSubmit={async e => {
                 e.preventDefault()
                 setLoading(true)
-                
+
                 await postComment(postId, user, text, setComments, setText)
 
                 setLoading(false);

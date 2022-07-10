@@ -140,10 +140,10 @@ function PostLayout({ post, user, setPosts, setShowToast, socket }) {
                                     });
                                     socket.current.on("postLiked", () => {
                                         // if liked before
-                                        if(liked) {
+                                        if (liked) {
                                             setLikes(prev => prev.filter(like => like.user !== user._id))
-                                        } 
-                                        else { 
+                                        }
+                                        else {
                                             // adding the like to the likes array
                                             setLikes(prev => [...prev, { user: user._id }]);
                                         }

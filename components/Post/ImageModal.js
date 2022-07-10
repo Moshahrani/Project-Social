@@ -75,7 +75,7 @@ function ImageModal({
                             <div style={{
                                 marginBottom: "8px",
                                 // increase height for 2 comments or more for better viewing 
-                                height: comments.length > 2 ? "200px" :  "60px",
+                                height: comments.length > 2 ? "200px" : "60px",
                                 overflow: "auto"
                             }}>
                                 {comments.length > 0 &&

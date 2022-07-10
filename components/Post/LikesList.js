@@ -27,8 +27,6 @@ function LikesList({ postId, trigger }) {
         setLoading(false)
     }
 
-
-
     return (
         <Popup
             on="click"

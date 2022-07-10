@@ -64,7 +64,7 @@ function Settings({ newMessagePopup }) {
                             <Checkbox
                                 checked={popupSetting}
                                 toggle
-                                onChange={() => 
+                                onChange={() =>
                                     toggleMessagePopup(popupSetting, setPopupSetting, setSuccess)}
                             />
                         </div>

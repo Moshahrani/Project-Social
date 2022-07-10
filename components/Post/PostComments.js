@@ -29,7 +29,7 @@ function PostComments({ comment, user, setComments, postId }) {
                                             setDisabled(true);
                                             await deleteComment(postId, comment._id, setComments);
                                             setDisabled(false);
-                                          }}
+                                        }}
                                     />
                                 )}
                             </Comment.Action>

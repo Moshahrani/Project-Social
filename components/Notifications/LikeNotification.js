@@ -13,7 +13,7 @@ function LikeNotification({ notification }) {
                             <Feed.User as="a" href={`/${notification.user.username}`}>
                                 {notification.user.name}
                             </Feed.User>{" "}
-                                liked your <a href={`/post/${notification.post._id}`}>post.</a>
+                            liked your <a href={`/post/${notification.post._id}`}>post.</a>
                             <Feed.Date>{calculateTime(notification.date)}</Feed.Date>
                         </>
                     </Feed.Summary>

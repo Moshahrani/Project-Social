@@ -9,9 +9,9 @@ function FollowerNotification({
     loggedUserFollowStats,
     setUserFollowStats
 }) {
-    
+
     const [disabled, setDisabled] = useState(false);
-    
+
     // notification.user compared with following.user to check if we are 
     // following the user with the notification or not
     const isFollowing =
@@ -21,7 +21,7 @@ function FollowerNotification({
         ).length > 0;
 
     return (
-        <> 
+        <>
             <Feed.Event>
                 <Feed.Label image={notification.user.profilePicUrl} />
                 <Feed.Content>

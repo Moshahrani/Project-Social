@@ -60,7 +60,7 @@ function UpdateProfile({ Profile }) {
                         setLoading(false);
                         return setErrorMsg("Error Uploading Image");
                     }
-                    
+
                     await profileUpdate(profile, setLoading, setErrorMsg, profilePicUrl);
                 }}
             >

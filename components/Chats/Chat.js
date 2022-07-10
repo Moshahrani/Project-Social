@@ -6,17 +6,17 @@ import calculateTime from "../../utilities/calculateTime";
 function Chat({ chat, connectedUsers, deleteChat }) {
 
   const router = useRouter();
-  
+
   // connectedUsers with chat messages w/ "current logged in user"
   const isOnline =
-     connectedUsers.length > 0 &&
-     connectedUsers.filter(user => user.userId === chat.messagesWith).length > 0;
+    connectedUsers.length > 0 &&
+    connectedUsers.filter(user => user.userId === chat.messagesWith).length > 0;
 
   return (
     <>
-     {/* changing the query name in the URL 
+      {/* changing the query name in the URL 
         based on the chat we choose, to the ID of the user */}
-        
+
       <List selection>
         <List.Item
           active={router.query.message === chat.messagesWith}
@@ -48,7 +48,7 @@ function Chat({ chat, connectedUsers, deleteChat }) {
                   />
                 </div>
               </Comment.Metadata>
-               {/* if message is more than 20 characters, it will be cut off and a few periods 
+              {/* if message is more than 20 characters, it will be cut off and a few periods 
                will be added at the end of the message preview area, to show message continuation */}
               <Comment.Text>
                 {chat.lastMessage.length > 20
