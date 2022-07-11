@@ -9,7 +9,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
     try {
         const { userId } = req;
-     
+
         const user = await NotificationModel.findOne({ user: userId })
             .populate("notifications.user")
             .populate("notifications.post");
@@ -28,13 +28,13 @@ router.post("/", authMiddleware, async (req, res) => {
         const { userId } = req;
 
         const user = await UserModel.findById(userId);
-        
+
         // if true, set to false
         if (user.unreadNotification) {
             user.unreadNotification = false;
             await user.save();
         }
-        
+
         return res.status(200).send("Updated Successfully");
     } catch (error) {
         console.error(error);

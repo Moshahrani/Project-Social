@@ -13,7 +13,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
     try {
         const user = await UserModel.findById(userId);
- 
+
         const userFollowInfo = await FollowerModel.findOne({ user: userId });
 
         return res.status(200).json({ user, userFollowInfo });
@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
 
         if (!isPassword) {
             return res.status(401).send("Invalid Credentials")
-        };  
+        };
 
         // checking if user has a chat model
         const chatModel = await ChatModel.findOne({ user: user._id })
@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
         // adding a chat model if user doesn't have one
         if (!chatModel) {
             await new ChatModel({ user: user._id, chats: [] }).save();
-        }        
+        }
 
         // sending token back to frontend 
 

@@ -31,7 +31,7 @@ router.get("/:username", async (req, res) => {
             return res.status(401).send("Username is already in use");
         }
         return res.status(200).send("Available");
-        
+
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
@@ -64,14 +64,14 @@ router.post("/", async (req, res) => {
         let user;
         user = await UserModel.findOne({ email: email.toLowerCase() });
         if (user) {
-          return res.status(401).send("User is already registered");
+            return res.status(401).send("User is already registered");
         }
-   
+
         user = await UserModel.findOne({ username: username.toLowerCase() });
         if (user) {
-          return res.status(401).send("Username is already in use");
+            return res.status(401).send("Username is already in use");
         }
-   
+
 
         user = new UserModel({
             name,

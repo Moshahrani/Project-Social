@@ -18,7 +18,7 @@ router.get("/:searchText", authMiddleware, async (req, res) => {
             // not case sensitive "i" option
             name: { $regex: searchText, $options: "i" }
         });
-        
+
         // will search for users that aren't the user themselves
         const resultsToSend = results.length > 0
             && results.filter(result => result._id.toString() !== userId)

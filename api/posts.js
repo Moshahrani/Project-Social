@@ -5,11 +5,11 @@ const UserModel = require("../models/UserModel");
 const PostModel = require("../models/PostModel");
 const FollowerModel = require("../models/FollowerModel");
 const uuid = require("uuid").v4;
-const { 
-    newLikeNotification, 
-    removeLikeNotification, 
-    newCommentNotification, 
-    removeCommentNotification 
+const {
+    newLikeNotification,
+    removeLikeNotification,
+    newCommentNotification,
+    removeCommentNotification
 } = require("../utilities/notificationEvents");
 
 // creating a post
@@ -145,7 +145,7 @@ router.get("/:postId", authMiddleware, async (req, res) => {
         if (!post) {
             return res.status(404).send("Post not found");
         }
-        return res.json(post); 
+        return res.json(post);
     } catch (error) {
         console.error(error);
         return res.status(500).send("Server error");
@@ -219,7 +219,7 @@ router.post("/like/:postId", authMiddleware, async (req, res) => {
 
         await post.likes.unshift({ user: userId });
         await post.save();
-        
+
         // if user is liking their own post, no notification 
         // will be sent to them
         if (post.user.toString() !== userId) {
@@ -267,7 +267,7 @@ router.put("/unlike/:postId", authMiddleware, async (req, res) => {
         // if user is unliking their own post, no notification 
         // will be sent to them
         if (post.user.toString() !== userId) {
-             await removeLikeNotification(userId, postId, post.user.toString());
+            await removeLikeNotification(userId, postId, post.user.toString());
         }
 
         return res.status(200).send("Post Unliked")
@@ -335,12 +335,12 @@ router.post("/comment/:postId", authMiddleware, async (req, res) => {
 
         if (post.user.toString() !== userId) {
             await newCommentNotification(
-                postId, 
-                newComment._id, 
-                userId, 
-                post.user.toString(), 
+                postId,
+                newComment._id,
+                userId,
+                post.user.toString(),
                 text
-                )
+            )
         }
 
         return res.status(200).json(newComment._id);

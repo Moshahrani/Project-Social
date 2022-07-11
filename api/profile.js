@@ -283,25 +283,24 @@ router.post("/settings/password", authMiddleware, async (req, res) => {
 router.post("/settings/messagePopup", authMiddleware, async (req, res) => {
 
     try {
-      const user = await UserModel.findById(req.userId);
-      
-      // if newMessagePopup = true, change to false
-      if (user.newMessagePopup) {
-        user.newMessagePopup = false;
-      }
-      // if false, change to true
-      else {
-        user.newMessagePopup = true;
-      }
-      // then save 
-      await user.save();
-      return res.status(200).send("Success");
-      
+        const user = await UserModel.findById(req.userId);
+
+        // if newMessagePopup = true, change to false
+        if (user.newMessagePopup) {
+            user.newMessagePopup = false;
+        }
+        // if false, change to true
+        else {
+            user.newMessagePopup = true;
+        }
+        // then save 
+        await user.save();
+        return res.status(200).send("Success");
+
     } catch (error) {
-      console.error(error);
-      return res.status(500).send("Server Error");
+        console.error(error);
+        return res.status(500).send("Server Error");
     }
-  });
- 
-  module.exports = router;
- 
+});
+
+module.exports = router;
