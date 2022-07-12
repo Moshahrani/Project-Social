@@ -6,8 +6,8 @@ module.exports = (req, res, next) => {
         if (!req.headers.authorization) {
             return res.status(401).send("Unauthorized");
         }
-         // destructuring userId from payload object after token was sent 
-         // from our backend (auth.js)
+        // destructuring userId from payload object after token was sent 
+        // from our backend (auth.js)
 
         const { userId } = jsonwt.verify(req.headers.authorization, process.env.jsonwtSecret);
 

@@ -20,13 +20,13 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     let pageProps = {};
 
     // variable for protected routes
-    const protectedRoutes = 
-    ctx.pathname === "/" || 
-    ctx.pathname === "/[username]" ||
-    ctx.pathname === "/notifications" ||
-    ctx.pathname === "/post/[postId]" ||
-    ctx.pathname === "/messages" || 
-    ctx.pathname === "/search";
+    const protectedRoutes =
+        ctx.pathname === "/" ||
+        ctx.pathname === "/[username]" ||
+        ctx.pathname === "/notifications" ||
+        ctx.pathname === "/post/[postId]" ||
+        ctx.pathname === "/messages" ||
+        ctx.pathname === "/search";
 
     // if there's no token and user is trying to access protectedRoutes
     // we will redirect user back to login page
@@ -41,7 +41,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
         // when token is in storage
         try {
             const result = await axios.get(`${baseUrl}/api/authorization`,
-            { headers: { Authorization: token }});
+                { headers: { Authorization: token } });
 
             const { user, userFollowInfo } = result.data
 

@@ -32,7 +32,7 @@ function Login() {
 
     }, [user]);
 
-    const handleSubmit = async e => { 
+    const handleSubmit = async e => {
         e.preventDefault();
 
         await loginUser(user, setErrorMessage, setFormLoading);
@@ -44,11 +44,11 @@ function Login() {
         const userEmail = cookie.get("userEmail");
         // check for userEmail and then automatically fill in user info/values
         if (userEmail) {
-          setUser(prev => ({ ...prev, email: userEmail }))
+            setUser(prev => ({ ...prev, email: userEmail }))
         };
-      }, []);
-   
-    
+    }, []);
+
+
     return (
         <>
             <HeaderMessage />

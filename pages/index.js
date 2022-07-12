@@ -177,7 +177,7 @@ export const getServerSideProps = async ctx => {
     });
 
     return { props: { postsData: res.data } };
-    
+
   } catch (error) {
     return { props: { errorLoading: true } };
   }

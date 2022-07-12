@@ -7,7 +7,7 @@ const userInfo = async (userToFindId) => {
   try {
 
     const result = await axios.get(`${baseUrl}/api/chats/user/${userToFindId}`, {
-        headers: { Authorization: cookie.get("token")}
+      headers: { Authorization: cookie.get("token") }
     });
 
     return { name: result.data.name, profilePicUrl: result.data.profilePicUrl };

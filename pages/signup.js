@@ -40,19 +40,19 @@ function Signup() {
     };
 
     const handleSubmit = async e => {
-     e.preventDefault();
-     setFormLoading(true)
+        e.preventDefault();
+        setFormLoading(true)
 
-     let profilePicUrl;
-       if (media !== null) {
-           profilePicUrl = await uploadImage(media)
-       }
+        let profilePicUrl;
+        if (media !== null) {
+            profilePicUrl = await uploadImage(media)
+        }
 
-       if (media !== null && !profilePicUrl) {
-           setFormLoading(false)
-           return setErrorMessage("Error uploading image")
-       }
-       await registerUser(user, profilePicUrl, setErrorMessage, setFormLoading);
+        if (media !== null && !profilePicUrl) {
+            setFormLoading(false)
+            return setErrorMessage("Error uploading image")
+        }
+        await registerUser(user, profilePicUrl, setErrorMessage, setFormLoading);
     };
 
     const [formLoading, setFormLoading] = useState(false);

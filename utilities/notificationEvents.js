@@ -101,7 +101,7 @@ const newCommentNotification = async (
 
 // notify user when another user removes a comment from their post 
 const removeCommentNotification = async (postId, commentId, userId, userToNotifyId) => {
-    
+
     try {
         await NotificationModel.findOneAndUpdate(
             { user: userToNotifyId },
@@ -150,8 +150,8 @@ const newFollowerNotification = async (userId, userToNotifyId) => {
 const removeFollowerNotification = async (userId, userToNotifyId) => {
 
     try {
-          //   pull operator removes all instances of a value
-           //  from an existing array
+        //   pull operator removes all instances of a value
+        //  from an existing array
         await NotificationModel.findOneAndUpdate(
             { user: userToNotifyId },
 
@@ -164,7 +164,7 @@ const removeFollowerNotification = async (userId, userToNotifyId) => {
     }
 };
 
-module.exports= {
+module.exports = {
     setNotificationToUnread,
     newLikeNotification,
     removeLikeNotification,

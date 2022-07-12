@@ -1,7 +1,7 @@
 import axios from "axios"
 
-const uploadImage = async (media) => { 
-   
+const uploadImage = async (media) => {
+
     try {
         const form = new FormData()
 
