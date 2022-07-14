@@ -11,7 +11,7 @@ const uploadImage = async (media) => {
 
         const result = await axios.post(process.env.CLOUDINARY_URL, form)
         console.log(result)
-        return result.data.url
+        return res.data.secure_url;
     } catch (error) {
         return
     }
