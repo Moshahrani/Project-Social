@@ -2,6 +2,9 @@
   "name": "npm",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "16.x"
+  },
   "author": "Moshfeq Shahrani",
   "license": "ISC",
   "scripts": {
@@ -10,7 +13,7 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
-    "@artsy/fresnel": "^1.9.0",
+    "@artsy/fresnel": "^1.3.1",
     "axios": "^0.26.1",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.3",
@@ -22,9 +25,9 @@
     "next": "^12.1.5",
     "nookies": "^2.5.2",
     "nprogress": "^0.2.0",
-    "react": "^18.2.0",
+    "react": "17.0.2",
     "react-cropper": "^2.1.8",
-    "react-dom": "^18.2.0",
+    "react-dom": "17.0.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-toastify": "^9.0.4",
     "semantic-ui-css": "^2.4.1",
