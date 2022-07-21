@@ -32,5 +32,10 @@ $ npm start
 ![Screen Shot 2022-07-20 at 9 28 24 PM](https://user-images.githubusercontent.com/56458885/180129942-c31a3dd8-991b-46ab-aa05-48e51d33d432.png)
 
 ## Demo
-![socialgiphy](https://user-images.githubusercontent.com/56458885/180130749-03d28d39-b422-4f01-bb24-db2ad88e91e1.gif)
+![giphy33](https://user-images.githubusercontent.com/56458885/180291033-0fc00551-e43d-445c-963e-ee837b2eb012.gif)
+
+![socialgiphy5](https://user-images.githubusercontent.com/56458885/180296412-c01b28f0-b20a-400a-aec6-c8d3ed11e2e3.gif)
+
+![giphy](https://user-images.githubusercontent.com/56458885/180318512-730b96ca-9e0f-46f3-a937-1b9089ddf3f1.gif)
+
 
