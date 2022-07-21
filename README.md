@@ -31,6 +31,9 @@ $ npm start
 ## Screenshots
 ![Screen Shot 2022-07-20 at 9 28 24 PM](https://user-images.githubusercontent.com/56458885/180129942-c31a3dd8-991b-46ab-aa05-48e51d33d432.png)
 
+![Screen Shot 2022-07-21 at 4 35 37 PM](https://user-images.githubusercontent.com/56458885/180332038-6b64d086-ba15-4201-8390-41b3a7e404e9.png)
+
+
 ## Demo
 ![giphy33](https://user-images.githubusercontent.com/56458885/180291033-0fc00551-e43d-445c-963e-ee837b2eb012.gif)
 
@@ -38,4 +41,7 @@ $ npm start
 
 ![giphy](https://user-images.githubusercontent.com/56458885/180318512-730b96ca-9e0f-46f3-a937-1b9089ddf3f1.gif)
 
+![messageGiphy](https://user-images.githubusercontent.com/56458885/180330948-7757e79e-6e16-42ed-9596-55910b65010b.gif)
+
+![messagegiphy2](https://user-images.githubusercontent.com/56458885/180331883-0f5f830f-bf75-44e6-a7e3-9f0934e9120a.gif)
 
