@@ -18,7 +18,7 @@ import cookie from "js-cookie";
 
 function Index({ user, postsData, errorLoading }) {
 
-  const [posts, setPosts] = useState(postsData);
+  const [posts, setPosts] = useState(postsData || []);
   const [showToast, setShowToast] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 

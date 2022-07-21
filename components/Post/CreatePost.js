@@ -39,7 +39,7 @@ function CreatePost({ user, setPosts }) {
         if (media !== null) {
             console.log(media)
             picUrl = await uploadImage(media);
-            console.log(picUrl)
+            picUrl = picUrl.data.secure_url
             if (!picUrl) {
                 setLoading(false);
                 return setError("Error Uploading Image");

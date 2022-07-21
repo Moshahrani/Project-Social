@@ -32,7 +32,7 @@ router.post("/", authMiddleware, async (req, res) => {
         if (picUrl) newPost.picUrl = picUrl;
 
         const post = await new PostModel(newPost).save();
-
+       console.log(post)
         const postCreated = await PostModel.findById(post._id).populate("user");
 
         return res.json(postCreated);
