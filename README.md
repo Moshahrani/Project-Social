@@ -12,6 +12,7 @@ A Social Media app with various features including real time messaging to postin
 - Socket.io
 - MongoDB
 - Jest
+- Cypress
 - CircleCI
 - Heroku
 
