@@ -1,7 +1,7 @@
 # Project-Social
 
 ## General Info
-A Social Media app with various features including real time messaging to posting a status, following/follower profiles, to instant notifications.
+A Social Media app with various features including real time messaging, posting a status, following/follower profiles, to instant notifications.
 
 
 ## Technologies:
