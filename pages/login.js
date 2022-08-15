@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Message, Segment, Divider } from "semantic-ui-react";
 import { HeaderMessage, FooterMessage } from "../components/Basic/WelcomeMessage";
 import { loginUser } from "../utilities/authUser";
@@ -56,6 +56,7 @@ function Login() {
                 <Message error header="Oops" content={errorMessage} onDismiss={() => setErrorMessage(null)} />
                 <Segment>
                     <Form.Input
+                        data-testid="email"
                         required
                         fluid
                         label="Email"
@@ -68,6 +69,7 @@ function Login() {
                         type="email"
                     />
                     <Form.Input
+                        data-testid="password"
                         required
                         fluid
                         label="Password"
@@ -86,6 +88,7 @@ function Login() {
                     />
                     <Divider hidden />
                     <Button
+                        data-testid="signup" 
                         icon="signup"
                         content="Login"
                         type="submit"

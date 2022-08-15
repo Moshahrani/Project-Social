@@ -1,22 +1,33 @@
 import Login from "../pages/login";
-import { Message } from "semantic-ui-react"
-import HeaderMessage from "../components/Basic/WelcomeMessage"
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
+jest.mock('next/router', () => ({
+    useRouter: () => ({
+        pathname: '/signup'
+    })
+}))
 
-describe("Login Page", () => {
-    it("renders aa header message", () => {
-        render(<HeaderMessage />);
-        // check if all components are rendered
-       // expect(screen.getByTestId("posts")).toBeInTheDocument();
-    });
+it("renders Login/Signup component", () => {
+    render(<Login />);
+    expect(true).toBe(true);
 });
 
-// describe("Login Page", () => {
-//     it("renders a post/posts", () => {
-//         render(<Index />);
-//         // check if all components are rendered
-//         expect(screen.getByTestId("posts")).toBeInTheDocument();
-//     });
-// });
+it("renders email form input", () => {
+    const { getByTestId } = render(<Login />);
+    const emailForm = getByTestId("email");
+    expect(emailForm.innerHTML).toMatch("email")
+});
+
+it("renders password form input", () => {
+    const { getByTestId } = render(<Login />);
+    const passwordForm = getByTestId("password");
+    expect(passwordForm.innerHTML).toMatch("password")
+});
+
+it("renders signup button", () => {
+    const { getByTestId } = render(<Login />);
+    const signupButton = getByTestId("signup");
+    expect(signupButton.innerHTML).toMatch("signup")
+})
+

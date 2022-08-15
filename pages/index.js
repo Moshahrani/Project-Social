@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import baseUrl from "../utilities/baseUrl";
 import CreatePost from "../components/Post/CreatePost";
 import PostLayout from "../components/Post/PostLayout";
-import { Placeholder, Segment } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import { parseCookies } from "nookies";
 import { NoPosts } from "../components/NoData";
 import { PostDeleteToast } from "../components/Toast";
