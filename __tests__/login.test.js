@@ -1,6 +1,7 @@
 import Login from "../pages/login";
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Form } from "semantic-ui-react";
 
 jest.mock('next/router', () => ({
     useRouter: () => ({
@@ -29,5 +30,10 @@ it("renders signup button", () => {
     const { getByTestId } = render(<Login />);
     const signupButton = getByTestId("signup");
     expect(signupButton.innerHTML).toMatch("signup")
-})
+});
 
+test("password fires onClick to show password", () => {
+        const { getByTestId } = render(<Login />);
+        const button = getByTestId('password');
+        fireEvent.click(button);
+});
