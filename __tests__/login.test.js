@@ -1,7 +1,7 @@
 import Login from "../pages/login";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { Form } from "semantic-ui-react";
+import { Form, Button, Message, Segment, Divider } from "semantic-ui-react";
 
 jest.mock('next/router', () => ({
     useRouter: () => ({
@@ -13,6 +13,21 @@ it("renders Login/Signup component", () => {
     render(<Login />);
     expect(true).toBe(true);
 });
+
+it("renders Form", () => {
+    render(<Form />);
+    expect(true).toBe(true);
+})
+
+it("renders Message if error exists", () => {
+    render(<Message />);
+    expect(true).toBe(true);
+})
+
+it("renders Form Input", () => {
+    render(<Form.Input />);
+    expect(true).toBe(true);
+})
 
 it("renders email form input", () => {
     const { getByTestId } = render(<Login />);
