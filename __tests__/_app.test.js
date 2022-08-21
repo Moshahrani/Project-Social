@@ -15,10 +15,10 @@ import { Layout, Component } from "semantic-ui-react"
 //     })
 // }))
 
-it("renders MyApp component", () => {
-    render(<Layout />);
-    expect(true).toBe(true);
-});
+// it("renders MyApp component", () => {
+//     render(<Layout />);
+//     expect(true).toBe(true);
+// });
 
 // it("renders Form", () => {
 //     render(<Form />);

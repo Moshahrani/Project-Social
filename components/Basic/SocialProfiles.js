@@ -18,6 +18,7 @@ function SocialProfiles({
                 placeholder="bio"
             />
             <Button
+                data-testid="showLinks"
                 content="Add Social Links"
                 color="red"
                 icon="at"
@@ -28,6 +29,7 @@ function SocialProfiles({
                 <>
                     <Divider />
                     <Form.Input
+                        data-testid="fb"
                         icon="facebook"
                         iconPosition="left"
                         name="facebook"
@@ -35,6 +37,7 @@ function SocialProfiles({
                         onChange={handleChange}
                     />
                     <Form.Input
+                        data-testid="tw" 
                         icon="twitter"
                         iconPosition="left"
                         name="twitter"
@@ -42,6 +45,7 @@ function SocialProfiles({
                         onChange={handleChange}
                     />
                     <Form.Input
+                        data-testid="insta"
                         icon="instagram"
                         iconPosition="left"
                         name="instagram"
@@ -49,6 +53,7 @@ function SocialProfiles({
                         onChange={handleChange}
                     />
                     <Form.Input
+                        data-testid="yt"
                         icon="youtube"
                         iconPosition="left"
                         name="youtube"
