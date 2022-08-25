@@ -11,12 +11,13 @@ jest.mock("next/router", () => ({
             pathname: "/messages",
             query: "",
             asPath: "",
-            isOnine: {},
+            isOnline: {},
         };
     },
 }));
 
 it("renders Chat component", () => {
-    render(<Chat connectedUsers={[]} message={"hello"} chat={{}}messagesWith={[]} lastMessage={length=20} />);
+    render(<Chat connectedUsers={[]} message={"hello"} 
+    chat={{lastMessage: "Hey, how was last nigth?"}} messagesWith={[]} length={23}/>);
     expect(true).toBe(true);
 });
