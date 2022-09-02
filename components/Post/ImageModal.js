@@ -79,7 +79,7 @@ function ImageModal({
                                 overflow: "auto"
                             }}>
                                 {comments.length > 0 &&
-                                    comments.map((comment, i) => (
+                                    comments.map((comment) => (
                                         <PostComments
                                             key={comment._id}
                                             comment={comment}
