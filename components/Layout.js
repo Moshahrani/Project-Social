@@ -36,7 +36,6 @@ function Layout({ children, user }) {
     // Router.onRouteChangeComplete=()=>nprogress.done();
     // Router.onRouteChangeError=()=>nprogress.done();
 
-
     return (
         <>
             <HeadInfo />

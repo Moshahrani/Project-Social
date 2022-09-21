@@ -32,7 +32,6 @@ function Index({ user, postsData, errorLoading }) {
 
   const socket = useRef();
 
-
   useEffect(() => {
 
     if (!socket.current) {

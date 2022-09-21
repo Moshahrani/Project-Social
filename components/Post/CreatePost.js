@@ -9,7 +9,7 @@ function CreatePost({ user, setPosts }) {
     const [newPost, setNewPost] = useState({ text: "", location: "" });
     const [loading, setLoading] = useState(false);
     const inputRef = useRef();
-
+   
     const [error, setError] = useState(null);
     const [highlight, setHighlight] = useState(false);
     const [media, setMedia] = useState(null);
@@ -37,7 +37,7 @@ function CreatePost({ user, setPosts }) {
         let picUrl;
 
         if (media !== null) {
-            console.log(media)
+        
             picUrl = await uploadImage(media);
             picUrl = picUrl.data.secure_url
             if (!picUrl) {

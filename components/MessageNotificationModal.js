@@ -19,7 +19,6 @@ function MessageNotificationModal({
     const formSubmit = e => {
         e.preventDefault();
 
-
         // sending same data as in messages page
         if (socket.current) {
             socket.current.emit("sendMsgFromNotification", {
