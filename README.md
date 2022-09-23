@@ -13,9 +13,9 @@ A Social Media app with various features including real time messaging, posting 
 - Express
 - Socket.io
 - MongoDB
+- JWT
 - Jest
 - Cypress
-- CircleCI
 - Heroku
 
 ## Setup
@@ -30,6 +30,17 @@ To run this project, install it locally using npm:
 $ npm install
 $ npm start
 ```
+## Features
+- User profiles
+- Follow/Unfollow 
+- Search Bar for finding users
+- Notification features (comments, likes, messages)
+- Customize Notifications (popups)
+- Upload Images, Cropping Images
+- Real Time Chat
+- Online now users (green indicator by username in chat)
+- Change password option
+
 
 ## Screenshots
 ![Screen Shot 2022-07-20 at 9 28 24 PM](https://user-images.githubusercontent.com/56458885/180129942-c31a3dd8-991b-46ab-aa05-48e51d33d432.png)
