@@ -4,7 +4,9 @@
 https://project-socialmedia.herokuapp.com/login
 
 *** Sample Credentials for website ^^^
+
 email - jess@yahoo.com
+
 password - 123123
 
 ## General Info
