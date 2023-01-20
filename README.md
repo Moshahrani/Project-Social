@@ -2,6 +2,9 @@
 
 ## Link
 https://project-socialmedia.herokuapp.com/login
+*** Sample Credentials for website ^^^
+email - jess@yahoo.com
+password - 123123
 
 ## General Info
 A Social Media app with various features including real time messaging, posting a status, following/follower profiles, to instant notifications.
